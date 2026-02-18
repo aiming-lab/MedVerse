@@ -1,0 +1,100 @@
+**Task 1: Step-by-Step Reasoning From DAG graph** 
+
+You are an expert in the medical domain. Given a medical goal, a plan consisting of a list of steps with their dependencies and associated entity keywords, your task is to reason **step by step**, performing **CoT (Chain-of-Thought) reasoning for each step independently**, as if you are deriving the final goal without prior knowledge of the answer.
+
+Your focus is to reason through **only one step at a time**. Each step’s reasoning must rely solely on:
+* The **CoT results from the directly dependent previous steps**, and
+* The **entity keywords specific to the current step**.
+
+**Output only a single concise CoT paragraph focused strictly on factual reasoning with minimal inference.**
+
+Do **not**:
+* Explain the goal.
+* Speculate about future steps.
+* Mention dependencies or reference previous steps explicitly.
+* Introduce extraneous information like definitions, purpose, or clinical relevance.
+* **State functions, importance, or implications of anatomical structures.**
+
+Just reason through the current step using **only necessary factual inference and brief, anatomy-based logic**, grounded in structural relationships.
+
+**Guidelines:**
+* Identify the **dependencies** of the current step from the plan.
+* Use the **CoT results** of those dependencies as your prior knowledge.
+* Combine this information with the **current step’s entity keywords** to form a **short and concise** reasoning paragraph.
+* Ensure your output is only **one short paragraph**, clearly articulating **only what is necessary** to move forward.
+* Do **not** mention the existence of predefined reasoning paths, provided answers, or assumptions about correctness.
+* The reasoning should be derived solely from the **current context**.
+
+**Requirements:**
+* All entities mentioned in the current step and in its directly dependent executed steps MUST have their factual details explicitly and concretely included in the reasoning paragraph. 
+* Do not omit or generalize these details; each entity must be described with its specific factual attributes as given in the inputs, which may include structural, anatomical, temporal, pathological, or disease-related characteristics.
+* The reasoning will be considered incorrect if any entity detail is missing or only vaguely referred to.
+
+**Return only the CoT paragraph. Do not include headings or labels.**
+
+**Task 2: Refine Step-by-Step Reasoning (Delete significance)** 
+You are a medical domain expert. 
+You are given a paragraph describing anatomical structures. 
+Your task is to revise the paragraph by removing any sentence that mentions importance, purpose, usefulness, significance, or general statements like 'this is essential' or 'understanding X helps'. 
+Only include structural or anatomical facts. 
+Do not explain, summarize, or mention reasoning. 
+Output should be a single paragraph.
+
+**Task 3: Refine Step-by-Step Reasoning (Eliminate redundant content and simplify)** 
+You are an expert in extracting concise, non-redundant, factual reasoning from multi-step medical analyses.
+
+You will be given:
+- A **goal**, describing the final medical question to be answered.
+- A series of **step-wise reasoning outputs**, where each step includes:
+1. A label in the format: `Entity A -> Entity B`, and
+2. A detailed reasoning paragraph.
+
+Your task:
+- Eliminate any redundant content that has already appeared in previous steps.
+- Keep only factual details necessary for reasoning toward the goal.
+- Contain only medical facts (do not include purpose, significance, or usefulness).
+- Exclude general background or unrelated definitions.
+- Must retain the logical relationship between Entity A and Entity B.
+
+Instructions:
+- For each step, return the original step label followed by your revised concise reasoning.
+- Do not include explanations, meta-comments, or summaries.
+- Maintain the original order of steps.
+- Do not modify the goal.
+- Do not add overall conclusions — only revise each step individually.
+
+**Task 4: Generate Conclusion Explanation and Answer** 
+You are an expert in medical reasoning.
+You will be given three inputs:
+1) Reasoning Paragraphs (a sequence of 'Transient Step N: ...' logical steps),
+2) Question (a medical multiple-choice question),
+3) Options (possible answers).
+Your task:
+- Use ONLY the Reasoning Paragraphs to determine the correct answer.
+- First, output the final answer to the Question.
+- Then, output one concise paragraph explaining why this is the correct answer, referencing the relevant steps.
+- Do not add external knowledge.
+Output format must be:
+Explanation: <one paragraph justification>
+Answer: <the correct option>
+
+**Task 5: Check Conclusion Eligible** 
+
+You are an expert evaluator of medical reasoning consistency.
+
+You will be given:
+- A **goal**, describing the correct answer to the medical question.
+- A **question** and its **options**.
+- A **conclusion**, which includes a final answer and an explanation.
+- A set of **reasoning steps**, representing the chain of thought used to derive the answer.
+
+Your tasks:
+1. Verify whether the conclusion's final answer matches the correct answer specified in the goal.
+2. Verify whether the explanation in the conclusion is logically consistent with the reasoning steps:
+- The explanation must be directly derivable from the given reasoning steps.
+- It must not rely on external facts or background knowledge not present in the reasoning steps.
+
+**Output requirements:**
+- Output "Consistent" if (a) the conclusion's answer matches the goal's correct answer AND (b) the explanation is logically consistent with the reasoning steps.
+- Output "Inconsistent" otherwise.
+- Do not output anything else.
