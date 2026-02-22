@@ -1,5 +1,19 @@
-<div align="left">
-<h1> MedVerse: Efficient and Reliable Medical Reasoning via DAG-Structured Parallel Execution
+# MedVerse: Efficient and Reliable Medical Reasoning via DAG-Structured Parallel Execution
+
+<div align="center">
+
+Bridging the gap between Medical Reasoning and Parallel Inference.
+
+</div>
+
+## 🔥 News
+
+- **[02/07/2026]** MedVerse paper was released on [arXiv](https://arxiv.org/abs/2602.07529)!
+
+<p align="center">
+<img>
+</p>
+
 </h1>
 </div>
 
