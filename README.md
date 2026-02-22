@@ -1,4 +1,4 @@
-<div align="center">
+<div align="left">
 <h1> MedVerse: Efficient and Reliable Medical Reasoning via DAG-Structured Parallel Execution
 </h1>
 </div>
