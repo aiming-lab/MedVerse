@@ -10,25 +10,36 @@ Bridging the gap between Medical Reasoning and Parallel Inference.
 
 - **[02/07/2026]** MedVerse paper was released on [arXiv](https://arxiv.org/abs/2602.07529)!
 
-<p align="center">
-<img>
-</p>
+## 📖 Overview
 
-</h1>
-</div>
+MedVerse is a framework that enables LLM agents to learn high-level, reusable behavioral patterns from past experiences. While traditional memory-based methods store redundant and noisy raw trajectories, SKILLRL abstracts these into a hierarchical skill library.
 
-<div align="center">
-[<a href="https://arxiv.org/abs/2506.09991">📄 Paper</a>] | [<a href="https://multiverse4fm.github.io/">🌐 Website</a>] | [<a href="https://huggingface.co/Multiverse4FM">🤗 Huggingface</a>] | [<a href="https://x.com/Multiverse4FM">🐦 Twitter</a>]
-</div>
-<br>
+## 🤖 Key Features
 
-## ⚡ TL;DR
+- **Experience-based Skill Distillation**: Transforms successful trajectories into strategic patterns and failed ones into concise lessons from failure.
 
-Multiverse is a generative modeling framework that natively supports parallel generation for efficient test-time scaling. We provide an end-to-end ecosystem for building and deploying Multiverse models in real-world applications.
+- **Hierarchical SKILLBANK**: Organizes knowledge into General Skills for universal strategic guidance and Task-Specific Skills for category-level heuristics.
 
-## 🎬 Demo
+- **Recursive Skill Evolution**: A dynamic mechanism where the skill library co-evolves with the agent's policy during RL by analyzing validation failures.
 
-We showcase a Multiverse model solving a math reasoning problem, demonstrating its parallel generation capabilities.
+- **Context Efficiency**: Achieves 10-20% token compression compared to raw trajectory storage while enhancing reasoning utility. 
+
+---
+
+## 🚀 Getting Started
+
+### Installation
+```bash
+git clone https://github.com/aiming-lab/MedVerse.git
+cd MedVerse
+
+pip install -r requirements.txt
+pip install vllm==0.11.0
+pip install flash-attn==2.7.4.post1 --no-build-isolation --no-cache-dir
+pip install -e .
+
+pip install openai
+```
 
 ## 🏛️ Repository Structure
 
@@ -61,10 +72,6 @@ Multiverse
 
 For detailed documentation and usage instructions, please refer to the README.md files in each directory.
 
-## 📝 Todo List
-
-- [ ] Add evaluation code based on lighteval
-- [ ] Support context parallelism
 ## 📚 References
 
 Thank you for your interest in Multiverse Engine! We hope this tool will be helpful for your research and development. If you find it useful, please consider citing our work. Happy coding! 🚀
