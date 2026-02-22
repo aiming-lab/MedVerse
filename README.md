@@ -1,5 +1,5 @@
 <div align="center">
-<h1><img src="assets/multiverse-logo.png" height="40px" align="top"/> Multiverse
+<h1> MedVerse: Efficient and Reliable Medical Reasoning via DAG-Structured Parallel Execution
 </h1>
 </div>
 
