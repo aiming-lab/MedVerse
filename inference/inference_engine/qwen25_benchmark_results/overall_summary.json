@@ -1,0 +1,50 @@
+{
+  "model_name": "qwen2.5-14b",
+  "base_url": "http://localhost:8010/v1",
+  "overall_total": 3441,
+  "overall_correct": 1317,
+  "overall_accuracy": 0.3827375762859634,
+  "overall_elapsed_sec": 35.14854118973017,
+  "files": [
+    {
+      "file": "HLE_biomed.jsonl",
+      "total": 103,
+      "correct": 11,
+      "accuracy": 0.10679611650485436,
+      "elapsed_sec": 1.029247883707285,
+      "output_file": "qwen25_benchmark_results/HLE_biomed.json"
+    },
+    {
+      "file": "MedXpertQA_test.jsonl",
+      "total": 1449,
+      "correct": 201,
+      "accuracy": 0.13871635610766045,
+      "elapsed_sec": 17.322500760667026,
+      "output_file": "qwen25_benchmark_results/MedXpertQA_test.json"
+    },
+    {
+      "file": "medbullets_op4.jsonl",
+      "total": 308,
+      "correct": 167,
+      "accuracy": 0.5422077922077922,
+      "elapsed_sec": 3.4614166421815753,
+      "output_file": "qwen25_benchmark_results/medbullets_op4.json"
+    },
+    {
+      "file": "medbullets_op5.jsonl",
+      "total": 308,
+      "correct": 152,
+      "accuracy": 0.4935064935064935,
+      "elapsed_sec": 2.6616121297702193,
+      "output_file": "qwen25_benchmark_results/medbullets_op5.json"
+    },
+    {
+      "file": "medqa_test.jsonl",
+      "total": 1273,
+      "correct": 786,
+      "accuracy": 0.617439120188531,
+      "elapsed_sec": 10.673763773404062,
+      "output_file": "qwen25_benchmark_results/medqa_test.json"
+    }
+  ]
+}

@@ -1,0 +1,2477 @@
+{
+  "model_name": "qwen2.5-14b",
+  "base_url": "http://localhost:8010/v1",
+  "file": "medbullets_op4.jsonl",
+  "result": {
+    "total": 308,
+    "correct": 167,
+    "accuracy": 0.5422077922077922,
+    "elapsed_sec": 3.4614166421815753,
+    "samples": [
+      {
+        "id": 0,
+        "prediction": "B",
+        "gold": "C",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 1,
+        "prediction": "C",
+        "gold": "B",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 2,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 3,
+        "prediction": "B",
+        "gold": "D",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 4,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 5,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 6,
+        "prediction": "A",
+        "gold": "C",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 7,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 8,
+        "prediction": "B",
+        "gold": "A",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 9,
+        "prediction": "B",
+        "gold": "A",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 10,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 11,
+        "prediction": "D",
+        "gold": "A",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 12,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 13,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 14,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 15,
+        "prediction": "C",
+        "gold": "B",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 16,
+        "prediction": "C",
+        "gold": "B",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 17,
+        "prediction": "D",
+        "gold": "A",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 18,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 19,
+        "prediction": "D",
+        "gold": "A",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 20,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 21,
+        "prediction": "B",
+        "gold": "A",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 22,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 23,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 24,
+        "prediction": "C",
+        "gold": "A",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 25,
+        "prediction": "B",
+        "gold": "D",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 26,
+        "prediction": "B",
+        "gold": "D",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 27,
+        "prediction": "B",
+        "gold": "C",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 28,
+        "prediction": "C",
+        "gold": "B",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 29,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 30,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 31,
+        "prediction": "D",
+        "gold": "A",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 32,
+        "prediction": "A",
+        "gold": "B",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 33,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 34,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 35,
+        "prediction": "B",
+        "gold": "A",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 36,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 37,
+        "prediction": "C",
+        "gold": "D",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 38,
+        "prediction": "C",
+        "gold": "B",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 39,
+        "prediction": "C",
+        "gold": "B",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 40,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 41,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 42,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 43,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 44,
+        "prediction": "B",
+        "gold": "D",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 45,
+        "prediction": "B",
+        "gold": "A",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 46,
+        "prediction": "D",
+        "gold": "C",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 47,
+        "prediction": "B",
+        "gold": "A",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 48,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 49,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 50,
+        "prediction": "C",
+        "gold": "A",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 51,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 52,
+        "prediction": "B",
+        "gold": "D",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 53,
+        "prediction": "D",
+        "gold": "B",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 54,
+        "prediction": "D",
+        "gold": "C",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 55,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 56,
+        "prediction": "A",
+        "gold": "C",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 57,
+        "prediction": "A",
+        "gold": "C",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 58,
+        "prediction": "C",
+        "gold": "D",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 59,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 60,
+        "prediction": "D",
+        "gold": "C",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 61,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 62,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 63,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 64,
+        "prediction": "B",
+        "gold": "D",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 65,
+        "prediction": "D",
+        "gold": "B",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 66,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 67,
+        "prediction": "B",
+        "gold": "C",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 68,
+        "prediction": "A",
+        "gold": "C",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 69,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 70,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 71,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 72,
+        "prediction": "B",
+        "gold": "A",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 73,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 74,
+        "prediction": "A",
+        "gold": "D",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 75,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 76,
+        "prediction": "C",
+        "gold": "B",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 77,
+        "prediction": "C",
+        "gold": "D",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 78,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 79,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 80,
+        "prediction": "B",
+        "gold": "D",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 81,
+        "prediction": "A",
+        "gold": "C",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 82,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 83,
+        "prediction": "C",
+        "gold": "A",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 84,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 85,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 86,
+        "prediction": "A",
+        "gold": "B",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 87,
+        "prediction": "B",
+        "gold": "A",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 88,
+        "prediction": "A",
+        "gold": "C",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 89,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 90,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 91,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 92,
+        "prediction": "B",
+        "gold": "C",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 93,
+        "prediction": "D",
+        "gold": "B",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 94,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 95,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 96,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 97,
+        "prediction": "C",
+        "gold": "D",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 98,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 99,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 100,
+        "prediction": "B",
+        "gold": "A",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 101,
+        "prediction": "A",
+        "gold": "B",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 102,
+        "prediction": "B",
+        "gold": "D",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 103,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 104,
+        "prediction": "A",
+        "gold": "C",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 105,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 106,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 107,
+        "prediction": "A",
+        "gold": "C",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 108,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 109,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 110,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 111,
+        "prediction": "B",
+        "gold": "C",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 112,
+        "prediction": "C",
+        "gold": "B",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 113,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 114,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 115,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 116,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 117,
+        "prediction": "B",
+        "gold": "D",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 118,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 119,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 120,
+        "prediction": "A",
+        "gold": "B",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 121,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 122,
+        "prediction": "D",
+        "gold": "A",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 123,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 124,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 125,
+        "prediction": "C",
+        "gold": "A",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 126,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 127,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 128,
+        "prediction": "B",
+        "gold": "A",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 129,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 130,
+        "prediction": "D",
+        "gold": "B",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 131,
+        "prediction": "C",
+        "gold": "A",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 132,
+        "prediction": "B",
+        "gold": "C",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 133,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 134,
+        "prediction": "A",
+        "gold": "C",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 135,
+        "prediction": "A",
+        "gold": "B",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 136,
+        "prediction": "A",
+        "gold": "D",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 137,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 138,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 139,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 140,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 141,
+        "prediction": "B",
+        "gold": "D",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 142,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 143,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 144,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 145,
+        "prediction": "B",
+        "gold": "C",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 146,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 147,
+        "prediction": "D",
+        "gold": "B",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 148,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 149,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 150,
+        "prediction": "D",
+        "gold": "A",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 151,
+        "prediction": "A",
+        "gold": "D",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 152,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 153,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 154,
+        "prediction": "B",
+        "gold": "D",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 155,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 156,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 157,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 158,
+        "prediction": "A",
+        "gold": "C",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 159,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 160,
+        "prediction": "C",
+        "gold": "B",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 161,
+        "prediction": "D",
+        "gold": "C",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 162,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 163,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 164,
+        "prediction": "C",
+        "gold": "B",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 165,
+        "prediction": "B",
+        "gold": "D",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 166,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 167,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 168,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 169,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 170,
+        "prediction": "D",
+        "gold": "B",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 171,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 172,
+        "prediction": "B",
+        "gold": "C",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 173,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 174,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 175,
+        "prediction": "B",
+        "gold": "C",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 176,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 177,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 178,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 179,
+        "prediction": "A",
+        "gold": "D",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 180,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 181,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 182,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 183,
+        "prediction": "B",
+        "gold": "A",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 184,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 185,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 186,
+        "prediction": "D",
+        "gold": "B",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 187,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 188,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 189,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 190,
+        "prediction": "C",
+        "gold": "B",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 191,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 192,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 193,
+        "prediction": "C",
+        "gold": "A",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 194,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 195,
+        "prediction": "C",
+        "gold": "A",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 196,
+        "prediction": "C",
+        "gold": "B",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 197,
+        "prediction": "A",
+        "gold": "B",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 198,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 199,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 200,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 201,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 202,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 203,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 204,
+        "prediction": "A",
+        "gold": "B",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 205,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 206,
+        "prediction": "C",
+        "gold": "D",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 207,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 208,
+        "prediction": "B",
+        "gold": "A",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 209,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 210,
+        "prediction": "A",
+        "gold": "D",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 211,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 212,
+        "prediction": "C",
+        "gold": "B",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 213,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 214,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 215,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 216,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 217,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 218,
+        "prediction": "C",
+        "gold": "D",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 219,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 220,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 221,
+        "prediction": "D",
+        "gold": "C",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 222,
+        "prediction": "B",
+        "gold": "D",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 223,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 224,
+        "prediction": "D",
+        "gold": "C",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 225,
+        "prediction": "C",
+        "gold": "D",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 226,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 227,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 228,
+        "prediction": "B",
+        "gold": "A",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 229,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 230,
+        "prediction": "A",
+        "gold": "D",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 231,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 232,
+        "prediction": "A",
+        "gold": "D",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 233,
+        "prediction": "D",
+        "gold": "C",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 234,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 235,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 236,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 237,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 238,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 239,
+        "prediction": "C",
+        "gold": "A",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 240,
+        "prediction": "B",
+        "gold": "C",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 241,
+        "prediction": "C",
+        "gold": "A",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 242,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 243,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 244,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 245,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 246,
+        "prediction": "D",
+        "gold": "C",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 247,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 248,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 249,
+        "prediction": "B",
+        "gold": "C",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 250,
+        "prediction": "C",
+        "gold": "D",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 251,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 252,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 253,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 254,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 255,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 256,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 257,
+        "prediction": "A",
+        "gold": "B",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 258,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 259,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 260,
+        "prediction": "D",
+        "gold": "C",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 261,
+        "prediction": "C",
+        "gold": "A",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 262,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 263,
+        "prediction": "A",
+        "gold": "D",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 264,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 265,
+        "prediction": "D",
+        "gold": "C",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 266,
+        "prediction": "D",
+        "gold": "D",
+        "correct": true,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 267,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 268,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 269,
+        "prediction": "D",
+        "gold": "C",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 270,
+        "prediction": "A",
+        "gold": "D",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 271,
+        "prediction": "D",
+        "gold": "A",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 272,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 273,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 274,
+        "prediction": "C",
+        "gold": "D",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 275,
+        "prediction": "B",
+        "gold": "A",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 276,
+        "prediction": "D",
+        "gold": "B",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 277,
+        "prediction": "D",
+        "gold": "B",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 278,
+        "prediction": "D",
+        "gold": "A",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 279,
+        "prediction": "C",
+        "gold": "D",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 280,
+        "prediction": "C",
+        "gold": "A",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 281,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 282,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 283,
+        "prediction": "C",
+        "gold": "A",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 284,
+        "prediction": "C",
+        "gold": "A",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 285,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 286,
+        "prediction": "A",
+        "gold": "D",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 287,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 288,
+        "prediction": "B",
+        "gold": "C",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 289,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 290,
+        "prediction": "A",
+        "gold": "B",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 291,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 292,
+        "prediction": "B",
+        "gold": "A",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 293,
+        "prediction": "D",
+        "gold": "A",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 294,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 295,
+        "prediction": "B",
+        "gold": "D",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 296,
+        "prediction": "D",
+        "gold": "A",
+        "correct": false,
+        "output": "D",
+        "error": null
+      },
+      {
+        "id": 297,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 298,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 299,
+        "prediction": "A",
+        "gold": "B",
+        "correct": false,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 300,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 301,
+        "prediction": "B",
+        "gold": "D",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 302,
+        "prediction": "B",
+        "gold": "A",
+        "correct": false,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 303,
+        "prediction": "C",
+        "gold": "C",
+        "correct": true,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 304,
+        "prediction": "C",
+        "gold": "A",
+        "correct": false,
+        "output": "C",
+        "error": null
+      },
+      {
+        "id": 305,
+        "prediction": "A",
+        "gold": "A",
+        "correct": true,
+        "output": "A",
+        "error": null
+      },
+      {
+        "id": 306,
+        "prediction": "B",
+        "gold": "B",
+        "correct": true,
+        "output": "B",
+        "error": null
+      },
+      {
+        "id": 307,
+        "prediction": "A",
+        "gold": "C",
+        "correct": false,
+        "output": "A",
+        "error": null
+      }
+    ]
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "model_name": "MedVerse",
+  "vllm_url": "http://localhost:8010/v1",
+  "batch_size": 128,
+  "max_samples_per_file": null,
+  "max_samples_total": null,
+  "results": []
+}

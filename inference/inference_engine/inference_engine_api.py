@@ -121,18 +121,20 @@ class AsyncGraphExecutor:
 class HybridInferenceEngine:
     def __init__(self):
         self.parser = PlanParser()
-        self.executor = AsyncGraphExecutor(self.step_processor)
-        self.current_base_prompt = "" 
-        self.current_plan_block = ""   
+        self.current_base_prompt = ""
+        self.current_plan_block = ""
 
     def _build_header(self, question):
-        """Construct LLaMA-3 formatted header."""
+        """Construct Qwen chat formatted header."""
         return (
-            f"<|begin_of_text|><|start_header_id|>user<|end_header_id|>\n"
+            "<|im_start|>system\n"
+            "You are Qwen, created by Alibaba Cloud. You are a helpful assistant.\n"
+            "<|im_end|>\n"
+            "<|im_start|>user\n"
             f"Question:\n{question}\n"
-            f"<|eot_id|>\n"
-            f"<|start_header_id|>assistant<|end_header_id|>\n"
-            f"<Think>\n"
+            "<|im_end|>\n"
+            "<|im_start|>assistant\n"
+            "<Think>\n"
         )
 
     async def step_processor(self, node_id, full_step_desc, context_results):
@@ -157,7 +159,7 @@ class HybridInferenceEngine:
                 prompt=prompt,
                 stop=["</Step>"], 
                 max_tokens=512,
-                temperature=0.7,
+                temperature=0.4,
                 extra_body={"skip_special_tokens": False}
             )
             content = response.choices[0].text
@@ -166,31 +168,98 @@ class HybridInferenceEngine:
             return f"<Step> {full_step_desc} Error: {str(e)}</Step>"
 
     async def run(self, question):
-        self.current_base_prompt = self._build_header(question)
+        base_prompt = self._build_header(question)
+        reasoning_path = ""
+        phase_timings = {
+            "planning_sec": 0.0,
+            "parsing_scheduling_sec": 0.0,
+            "execution_sec": 0.0,
+            "execution_first_char_avg_sec": None,
+            "execution_first_char_count": 0,
+        }
         
         # --- Phase 1: Planning ---
-        # Generate the reasoning path and plan
+        # Generate plan in two stages: up to <Plan>, then plan body until </Plan>.
+        planning_start = time.perf_counter()
         try:
+            preplan_response = await aclient.completions.create(
+                model=MODEL_NAME,
+                prompt=base_prompt,
+                stop=["<Plan>"],
+                max_tokens=256,
+                temperature=0.1,
+                extra_body={"skip_special_tokens": False}
+            )
+            preplan_text = preplan_response.choices[0].text
+            reasoning_path = preplan_text
+            plan_prompt = f"{base_prompt}{preplan_text}<Plan>\n"
             plan_response = await aclient.completions.create(
                 model=MODEL_NAME,
-                prompt=self.current_base_prompt,
+                prompt=plan_prompt,
                 stop=["</Plan>"], 
                 max_tokens=512,
                 temperature=0.1,
-                extra_body={"skip_special_tokens": False} 
+                extra_body={"skip_special_tokens": False}
             )
             generated_text = plan_response.choices[0].text
-            self.current_plan_block = f"{generated_text}</Plan>"
+            plan_block = f"<Plan>\n{generated_text}</Plan>\n"
         except Exception as e:
             return f"Planning Failed: {e}"
+        phase_timings["planning_sec"] = time.perf_counter() - planning_start
 
         # --- Phase 2: Parsing ---
-        graph = self.parser.parse(self.current_plan_block)
+        parsing_start = time.perf_counter()
+        graph = self.parser.parse(plan_block)
         if len(graph.nodes) == 0:
-            return f"{self.current_plan_block}\n<Error>Failed to parse plan</Error>"
+            return f"{plan_block}\n<Error>Failed to parse plan</Error>"
+        phase_timings["parsing_scheduling_sec"] += time.perf_counter() - parsing_start
 
         # --- Phase 3: Parallel Execution ---
-        results_dict = await self.executor.execute(graph)
+        execution_start = time.perf_counter()
+        step_first_char_latencies = []
+
+        async def step_processor(node_id, full_step_desc, context_results):
+            execution_context = "\n".join(context_results)
+            prompt = (
+                f"{base_prompt}"
+                f"{reasoning_path}"
+                f"{plan_block}\n"
+                f"<Execution>\n"
+                f"{execution_context}\n"
+                f"<Step> {full_step_desc}"
+            )
+            try:
+                request_start = time.perf_counter()
+                stream = await aclient.completions.create(
+                    model=MODEL_NAME,
+                    prompt=prompt,
+                    stop=["</Step>"],
+                    max_tokens=512,
+                    temperature=0.4,
+                    extra_body={"skip_special_tokens": False},
+                    stream=True,
+                )
+                first_char_sec = None
+                chunks = []
+                async for chunk in stream:
+                    piece = ""
+                    if getattr(chunk, "choices", None):
+                        piece = chunk.choices[0].text or ""
+                    if piece:
+                        if first_char_sec is None:
+                            first_char_sec = time.perf_counter() - request_start
+                        chunks.append(piece)
+
+                if first_char_sec is not None:
+                    step_first_char_latencies.append(first_char_sec)
+
+                content = "".join(chunks)
+                return f"<Step> {full_step_desc}{content}</Step>"
+            except Exception as e:
+                return f"<Step> {full_step_desc} Error: {str(e)}</Step>"
+
+        executor = AsyncGraphExecutor(step_processor)
+        results_dict = await executor.execute(graph)
         
         sorted_steps = [results_dict[i] for i in sorted(results_dict.keys())]
         full_execution_block = "<Execution>\n" + "\n".join(sorted_steps) + "\n</Execution>"
@@ -198,8 +267,9 @@ class HybridInferenceEngine:
         # --- Phase 4: Conclusion ---
         # Synthesize final answer based on execution history
         final_prompt = (
-            f"{self.current_base_prompt}"
-            f"{self.current_plan_block}\n"
+            f"{base_prompt}"
+            f"{reasoning_path}"
+            f"{plan_block}\n"
             f"{full_execution_block}\n"
             f"<Conclusion>"
         )
@@ -209,18 +279,25 @@ class HybridInferenceEngine:
             prompt=final_prompt,
             stop=["</Think>"], 
             max_tokens=512,
-            temperature=0.7,
+            temperature=0.4,
             extra_body={"skip_special_tokens": False}
         )
         
         final_output = (
-            f"{self.current_base_prompt}"
-            f"{self.current_plan_block}\n"
+            f"{base_prompt}"
+            f"{reasoning_path}"
+            f"{plan_block}\n"
             f"{full_execution_block}\n"
-            f"<Conclusion>{conclusion_response.choices[0].text}</Conclusion>\n"
+            f"<Conclusion>{conclusion_response.choices[0].text}\n"
             f"</Think>\n" 
         )
-        return final_output
+        phase_timings["execution_sec"] = time.perf_counter() - execution_start
+        if step_first_char_latencies:
+            phase_timings["execution_first_char_avg_sec"] = (
+                sum(step_first_char_latencies) / len(step_first_char_latencies)
+            )
+            phase_timings["execution_first_char_count"] = len(step_first_char_latencies)
+        return final_output, phase_timings
 
 # ==========================================
 # Serial Baseline Engine (vLLM)
@@ -228,20 +305,25 @@ class HybridInferenceEngine:
 class SerialBaselineEngine:
     async def run(self, question):
         prompt = (
-            f"<|begin_of_text|><|start_header_id|>user<|end_header_id|>\n"
+            "<|im_start|>system\n"
+            "You are Qwen, created by Alibaba Cloud. You are a helpful assistant.\n"
+            "<|im_end|>\n"
+            "<|im_start|>user\n"
             f"Question:\n{question}\n"
-            f"<|eot_id|>\n"
-            f"<|start_header_id|>assistant<|end_header_id|>\n"
-            f"<Think>\n"
+            "<|im_end|>\n"
+            "<|im_start|>assistant\n"
+            "<Think>\n"
         )
         start_time = time.time()
         response = await aclient.completions.create(
             model=MODEL_NAME,
             prompt=prompt,
-            stop=["<|eot_id|>"], 
+            stop=["</Think>"], 
             max_tokens=2048,
-            temperature=0.7
+            temperature=0.4,
+            extra_body={"skip_special_tokens": False}
         )
+        # print(response.choices[0].text)
         return response.choices[0].text, time.time() - start_time
 
 def load_dataset(path, limit=None):
