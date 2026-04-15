@@ -29,13 +29,13 @@ def filter_file(file_name):
             reasoning = reasoning.split('Conclusion:')[0]
 
             logger.info("Generating answer...")
-            llm_answer = utils.llm_generate_answer_with_reasoning(question, options, reasoning, engine='gpt-4')
+            llm_answer = utils.llm_generate_answer_with_reasoning(question, options, reasoning, engine='gpt-5.2')
             logger.info(f'Q: {question}')
             logger.info(f'A: {answer}')
             logger.info(f'LLM-A: {llm_answer}')
 
             logger.info("Judging answer...")
-            judged_result = utils.llm_judge_answer(llm_answer, answer, engine='gpt-4')
+            judged_result = utils.llm_judge_answer(llm_answer, answer, engine='gpt-5.2')
             logger.info(f'Judged: {judged_result}')
 
             if "true" in judged_result.lower():

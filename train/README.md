@@ -21,7 +21,6 @@ train/
 
 ## Requirements
 
-- 2× GPU minimum (tested on NVIDIA RTX PRO 6000 Blackwell, 96 GB each)
 - See `requirements.txt` for Python dependencies
 
 ## Quick Start
@@ -62,7 +61,7 @@ Key training hyperparameters (paper settings):
 |---|---|
 | Learning rate | 1e-5 |
 | Epochs | 3 |
-| Global batch size | 128 (2 GPU × 1 × grad_accum 64) |
+| Global batch size | 128 (4 GPU × 1 × grad_accum 32) |
 | Block size | 8192 |
 | LR scheduler | Cosine |
 | Warmup ratio | 0.03 |

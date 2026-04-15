@@ -2,7 +2,7 @@
 
 This directory contains the pipeline for generating the **MedVerse14k** training dataset — 13,904 medical QA samples annotated with knowledge-grounded DAG reasoning paths.
 
-The full dataset is available on [🤗 HuggingFace](https://huggingface.co/datasets/aiming-lab/MedVerse14k). Run this pipeline only if you want to generate data from scratch or extend it with new sources.
+The full dataset is available on [🤗 HuggingFace](https://huggingface.co/datasets/Jianwen/MedVerse14k). Run this pipeline only if you want to generate data from scratch or extend it with new sources.
 
 ---
 
@@ -106,8 +106,7 @@ The `Eligible` field tracks validation status: `0` = needs validation, `2` = ful
 ### 1. Install dependencies
 
 ```bash
-conda create -n medverse-data python=3.10 -y
-conda activate medverse-data
+conda activate medverse
 pip install openai pandas lxml
 ```
 
@@ -205,17 +204,14 @@ The [`medreason/`](medreason/) directory contains code adapted from [MedReason](
 ### Setup
 
 ```bash
-conda create -n medreason python=3.10 -y
-conda activate medreason
-pip install openai datasets torch sentence-transformers pandas networkx tqdm
+conda activate medverse
 ```
 
-**Configure Azure OpenAI credentials** in `medreason/utils.py`:
+**Set your OpenAI API key** in `medreason/utils.py` or via environment variable:
 
 ```python
 clients = {
-    "gpt-4": {
-        'endpoint': "https://YOUR-ENDPOINT.openai.azure.com/",
+    "gpt-5.2": {
         'api_key':  "YOUR_API_KEY",
     },
 }

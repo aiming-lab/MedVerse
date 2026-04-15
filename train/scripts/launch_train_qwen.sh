@@ -2,7 +2,7 @@
 # Launch MedVerse fine-tuning on Qwen2.5-7B-Instruct
 set -euo pipefail
 
-export CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0,1}"
+export CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0,1,2,3}"
 export HF_HOME="${HF_HOME:-/path/to/huggingface_cache}"
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 export PYTHONUNBUFFERED=1
@@ -19,7 +19,7 @@ source "$(conda info --base)"/etc/profile.d/conda.sh
 conda activate medverse
 
 torchrun \
-    --nproc-per-node 2 \
+    --nproc-per-node 4 \
     --master_port 12305 \
     sft_medverse.py \
     --model_name "$MODEL_PATH" \
@@ -27,7 +27,7 @@ torchrun \
     --block_size 8192 \
     --per_device_train_batch_size 1 \
     --per_device_eval_batch_size 1 \
-    --gradient_accumulation_steps 64 \
+    --gradient_accumulation_steps 32 \
     --num_train_epochs 3 \
     --learning_rate 1e-5 \
     --lr_scheduler_type cosine \

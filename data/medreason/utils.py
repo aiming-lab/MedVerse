@@ -1,4 +1,4 @@
-from openai import AzureOpenAI  # openai>=1.0.0
+from openai import OpenAI
 import os
 import time
 import json
@@ -12,29 +12,14 @@ import logging
 # Global variable to hold API cost across multiple LLM calls
 api_total_cost = 0.0
 
-# Configure Azure OpenAI credentials via environment variables:
-#   AZURE_OPENAI_ENDPOINT  — your Azure OpenAI resource endpoint
-#   AZURE_OPENAI_KEY       — your Azure OpenAI API key
-# Or edit the values below directly.
-_endpoint = os.environ.get("AZURE_OPENAI_ENDPOINT", "YOUR AZURE ENDPOINT")
-_api_key  = os.environ.get("AZURE_OPENAI_KEY",      "YOUR API KEY")
+_api_key = os.environ.get("OPENAI_API_KEY", "YOUR_API_KEY")
 
 clients = {
-    "gpt-4": {
-        'endpoint': _endpoint,
+    "gpt-5.2": {
         'api_key': _api_key,
-        'api_version': "2024-12-01-preview",
-        'name': 'gpt-4-1106-preview',
-        'input_price': 10.0 / 10 ** 6,
-        'output_price': 30.0 / 10 ** 6,
-    },
-    "gpt-4o": {
-        'endpoint': _endpoint,
-        'api_key': _api_key,
-        'api_version': "2024-12-01-preview",
-        'name': 'gpt-4o',
-        'input_price': 2.5 / 10 ** 6,
-        'output_price': 10.0 / 10 ** 6,
+        'name': 'gpt-5.2',
+        'input_price': 1.75 / 10 ** 6,
+        'output_price': 14.0 / 10 ** 6,
     }
 }
 
@@ -118,13 +103,9 @@ def compute_usage(response, engine):
     return cost
 
 
-def run_llm(prompt, temperature=0.0, max_tokens=3000, engine="gpt-4o", max_attempt=10):
+def run_llm(prompt, temperature=0.0, max_tokens=3000, engine="gpt-5.2", max_attempt=10):
     global api_total_cost
-    client = AzureOpenAI(
-        azure_endpoint=clients[engine]['endpoint'],
-        api_key=clients[engine]['api_key'],
-        api_version=clients[engine]['api_version']
-    )
+    client = OpenAI(api_key=clients[engine]['api_key'])
     messages = [
         {"role": "system", "content": "You are an AI assistant that helps people find information."},
         {"role": "user", "content": prompt},
@@ -134,17 +115,12 @@ def run_llm(prompt, temperature=0.0, max_tokens=3000, engine="gpt-4o", max_attem
     while flag == 0 and max_attempt > 0:
         max_attempt -= 1
         try:
-            if engine in {"gpt-4"}:
-                response = client.chat.completions.create(
-                    model=clients[engine]['name'], messages=messages,
-                    temperature=temperature,
-                    max_tokens=max_tokens + len(messages[0]['content']),
-                    frequency_penalty=0)
-            else:
-                response = client.chat.completions.create(
-                    model=clients[engine]['name'], messages=messages,
-                    temperature=temperature,
-                    max_completion_tokens=max_tokens, frequency_penalty=0)
+            response = client.chat.completions.create(
+                model=clients[engine]['name'],
+                messages=messages,
+                temperature=temperature,
+                max_completion_tokens=max_tokens,
+                frequency_penalty=0)
             result = response.choices[0].message.content
             api_total_cost += compute_usage(response, engine)["total"]
             flag = 1
@@ -155,7 +131,7 @@ def run_llm(prompt, temperature=0.0, max_tokens=3000, engine="gpt-4o", max_attem
     return result
 
 
-def coarse_entity_extraction(text, temperature=0.0, max_tokens=3000, engine="gpt-4o"):
+def coarse_entity_extraction(text, temperature=0.0, max_tokens=3000, engine="gpt-5.2"):
     Extract_prompt = """ You are a helpful, pattern-following medical assistant.
 Given the text in a medical or biomedical context, precisely extract all entities from the text.
 
@@ -192,7 +168,7 @@ output:
     return run_llm(prompt, temperature, max_tokens, engine)
 
 
-def most_correlated_enetity_selection(question, query_entity, similar_entities, temperature=0.0, max_tokens=3000, engine="gpt-4o"):
+def most_correlated_enetity_selection(question, query_entity, similar_entities, temperature=0.0, max_tokens=3000, engine="gpt-5.2"):
     Reformat_prompt = """ You are a helpful, pattern-following medical assistant.
     Given a medical question and corresponding answer, an query entity which is extracted from the question, and a list of similar entities.
     Select ONE most correlated entity from the list of similar entities based on the question and query entity.
@@ -234,7 +210,7 @@ def most_correlated_enetity_selection(question, query_entity, similar_entities, 
     return run_llm(prompt, temperature, max_tokens, engine)
 
 
-def QA_reformat_based_on_entity(question, answer, entity_list_text, temperature=0.0, max_tokens=5000, engine="gpt-4o"):
+def QA_reformat_based_on_entity(question, answer, entity_list_text, temperature=0.0, max_tokens=5000, engine="gpt-5.2"):
     Reformat_prompt = """ You are a helpful, pattern-following medical assistant.
 Given a medical question and answer, and all a list of entities.
 You need to reformat the question and answer into a pair of description and conclusion.
@@ -276,7 +252,7 @@ output:
 
 
 def QA_reformat_with_entity_extraction(question, answer, knowledge_graph, emb_model, nodeemb_dict,
-                                        temperature=0.0, max_tokens=5000, engine="gpt-4o"):
+                                        temperature=0.0, max_tokens=5000, engine="gpt-5.2"):
     QA_text = 'Question: {question}\nAnswer: {answer}'.format(question=question, answer=answer)
     all_entities = coarse_entity_extraction(QA_text, temperature, max_tokens, engine)
     all_entities = get_json_from_generated_text(all_entities)
@@ -309,7 +285,7 @@ def QA_reformat_with_entity_extraction(question, answer, knowledge_graph, emb_mo
 
 
 def path_sampling(path_all, question, answer, topK_reasoning_paths, max_path_number_per_group=50,
-                  engine="gpt-4o", logger=None):
+                  engine="gpt-5.2", logger=None):
     path_groups = {}
     for path in path_all:
         if len(path) < 2:
@@ -335,7 +311,7 @@ def path_sampling(path_all, question, answer, topK_reasoning_paths, max_path_num
 
 
 def most_correlated_path_selection(question, paths_text, answer, topK=2, temperature=0.0,
-                                    max_tokens=4000, engine="gpt-4o"):
+                                    max_tokens=4000, engine="gpt-5.2"):
     Reformat_prompt = """ You are a helpful, pattern-following medical assistant.
     Given a medical question and possible relation paths that link to the answer.
     Select up to {topK} most correlated entity from the relation paths list based on the question and the answer.
@@ -364,7 +340,7 @@ def most_correlated_path_selection(question, paths_text, answer, topK=2, tempera
     return get_json_from_generated_text(result)
 
 
-def llm_generate_answer_with_reasoning(question, options, reasoning, engine='gpt-4'):
+def llm_generate_answer_with_reasoning(question, options, reasoning, engine='gpt-5.2'):
     prompt = f"""
 You are an expert in the medical domain. You need to answer the following question based on the provided reasoning.
 YOU MUST USE THE PROVIDED REASONING TO ANSWER THE QUESTION.
@@ -379,7 +355,7 @@ Reasoning:
     return run_llm(prompt, engine=engine)
 
 
-def llm_judge_answer(llm_output, answer, engine='gpt-4o'):
+def llm_judge_answer(llm_output, answer, engine='gpt-5.2'):
     prompt = f"""
 You are an expert in the medical domain. Given a correct answer, and the answer from medical student.
 You need to judge whether the answer from medical student is correct, by comparing the answer from medical student with the correct answer.

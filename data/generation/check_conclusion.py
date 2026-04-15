@@ -15,7 +15,7 @@ API_KEY = api_key
 client = OpenAI(api_key=API_KEY)
 total_input_tokens, total_output_tokens = 0, 0
 
-def run_llm(model="gpt-4o", temperature=0, messages=""):
+def run_llm(model="gpt-5.2", temperature=0, messages=""):
     global total_input_tokens, total_output_tokens
     try:
         response = client.chat.completions.create(
@@ -87,7 +87,7 @@ for idx, item in data.items():
         }
     ]
 
-    answer = run_llm(model="gpt-4o", temperature=0, messages=messages_check_conclusion)
+    answer = run_llm(model="gpt-5.2", temperature=0, messages=messages_check_conclusion)
     print(answer)
     if answer == '**FAIL**':
         break

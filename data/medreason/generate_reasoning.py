@@ -22,7 +22,7 @@ def reasoning_generation(question,          # original question
                             max_path_number_per_group = 50,
                             temperature = 0.0,
                             max_tokens = 5000,
-                            engine="gpt-4o",
+                            engine="gpt-5.2",
                             filter_path=False):
     answer_prompt2 = """
     You are an expert in the medical domain.

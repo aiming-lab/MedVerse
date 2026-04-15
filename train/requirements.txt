@@ -1,4 +1,8 @@
 openai==1.56.1
+pandas
+lxml
+sentence-transformers
+networkx
 torch==2.8.0
 torchaudio==2.8.0
 torchvision==0.23.0

@@ -31,7 +31,7 @@ else:
         data1=json.load(f)
 
 total_input_tokens, total_output_tokens = 0, 0
-def run_llm(model="gpt-4o", temperature=0, messages=""):
+def run_llm(model="gpt-5.2", temperature=0, messages=""):
     global total_input_tokens, total_output_tokens
     try:
         response = client.chat.completions.create(
@@ -168,7 +168,7 @@ for idx, item in data.items():
                 }
             ]
 
-            raw_output = run_llm(model="gpt-4o", temperature=0, messages=messages)
+            raw_output = run_llm(model="gpt-5.2", temperature=0, messages=messages)
             if raw_output == '**FAIL**':
                 break
             
@@ -193,7 +193,7 @@ for idx, item in data.items():
                 }
             ]
 
-            final_output = run_llm(model="gpt-4", temperature=0, messages=messages_)
+            final_output = run_llm(model="gpt-5.2", temperature=0, messages=messages_)
             if final_output == '**FAIL**':
                 break
 
@@ -254,7 +254,7 @@ for idx, item in data.items():
             {multistep_reasoning}"""
         }
     ]
-    pending_final = run_llm(model="gpt-4o", temperature=0, messages=messages_dedup)
+    pending_final = run_llm(model="gpt-5.2", temperature=0, messages=messages_dedup)
     if pending_final == '**FAIL**':
         break
 
@@ -297,7 +297,7 @@ for idx, item in data.items():
             {pending_final}"""
         }
     ]
-    missing_detail_output = run_llm(model="gpt-4o", temperature=0, messages=messages_find_missing)
+    missing_detail_output = run_llm(model="gpt-5.2", temperature=0, messages=messages_find_missing)
     if missing_detail_output == '**FAIL**':
         break
 
@@ -342,7 +342,7 @@ for idx, item in data.items():
                 {missing_detail_output}"""
             }
         ]
-        total_final = run_llm(model="gpt-4o", temperature=0, messages=messages_insert_missing)
+        total_final = run_llm(model="gpt-5.2", temperature=0, messages=messages_insert_missing)
         if total_final == '**FAIL**':
             break
     # print(pending_final)
@@ -484,7 +484,7 @@ for idx, item in data.items():
     #     }
     # ]
     # response = client.chat.completions.create(
-    #     model="gpt-4o",
+    #     model="gpt-5.2",
     #     messages=messages2, 
     #     temperature=0
     # )
@@ -527,7 +527,7 @@ for idx, item in data.items():
             )
         }
     ]
-    conclusion = run_llm(model="gpt-4o", temperature=0, messages=messages3)
+    conclusion = run_llm(model="gpt-5.2", temperature=0, messages=messages3)
     if conclusion == '**FAIL**':
         break
     item['Conclusion'] = conclusion

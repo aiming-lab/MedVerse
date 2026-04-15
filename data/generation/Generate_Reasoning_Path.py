@@ -85,7 +85,7 @@ def deduplicate_reasoning_chains(text_block):
 
     return '\n'.join(unique_chains)
 
-def run_llm(model="gpt-4o", temperature=0, messages=""):
+def run_llm(model="gpt-5.2", temperature=0, messages=""):
     global total_input_tokens, total_output_tokens
     try:
         response = client.chat.completions.create(
@@ -143,7 +143,7 @@ def change_format(filter_reasoning_path):
             }
         ]
 
-        filter_reasoning_path = run_llm(model="gpt-4o", temperature=0, messages=messages2)
+        filter_reasoning_path = run_llm(model="gpt-5.2", temperature=0, messages=messages2)
         judge = validate_reasoning_chains(filter_reasoning_path)
         
     if judge==False:
@@ -202,7 +202,7 @@ with open(jsonl_path, "r", encoding="utf-8") as f:
             }
         ]
         
-        filter_reasoning_path = run_llm(model="gpt-4o", temperature=0, messages=messages1)
+        filter_reasoning_path = run_llm(model="gpt-5.2", temperature=0, messages=messages1)
         if filter_reasoning_path == "**FAIL**":
             continue
         
@@ -254,7 +254,7 @@ with open(jsonl_path, "r", encoding="utf-8") as f:
             }
         ]
 
-        new_reasoning_path = run_llm(model="gpt-4o", temperature=0.2, messages=messages3)
+        new_reasoning_path = run_llm(model="gpt-5.2", temperature=0.2, messages=messages3)
         if new_reasoning_path == "**FAIL**":
             continue
 
@@ -291,7 +291,7 @@ with open(jsonl_path, "r", encoding="utf-8") as f:
             }
         ]
 
-        new_reasoning_path = run_llm(model="gpt-4o", temperature=0.2, messages=messages4)
+        new_reasoning_path = run_llm(model="gpt-5.2", temperature=0.2, messages=messages4)
         if new_reasoning_path == "**FAIL**":
             continue
         new_reasoning_path = deduplicate_reasoning_chains(new_reasoning_path)
@@ -328,7 +328,7 @@ with open(jsonl_path, "r", encoding="utf-8") as f:
             }
         ]
 
-        validation = run_llm(model="gpt-4o", temperature=0, messages=messages5)
+        validation = run_llm(model="gpt-5.2", temperature=0, messages=messages5)
         if validation == "**FAIL**":
             continue
         # print(validation)
@@ -373,7 +373,7 @@ with open(jsonl_path, "r", encoding="utf-8") as f:
                     )
                 }
             ]
-            new_reasoning_path = run_llm(model="gpt-4o", temperature=0, messages=repair_prompt_messages)
+            new_reasoning_path = run_llm(model="gpt-5.2", temperature=0, messages=repair_prompt_messages)
             if new_reasoning_path == "**FAIL**":
                 continue
             new_reasoning_path = change_format(new_reasoning_path)
