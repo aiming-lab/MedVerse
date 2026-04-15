@@ -1,5 +1,7 @@
 # MedVerse: Efficient and Reliable Medical Reasoning via DAG-Structured Parallel Execution
 
+![MedVerse Pipeline](assets/medverse-pipeline.png)
+
 Bridging the gap between medical reasoning quality and inference efficiency through DAG-structured parallel execution.
 
 ## 🔥 News
