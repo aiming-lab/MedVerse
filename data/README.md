@@ -19,9 +19,9 @@ Raw medical QA (JSONL)
         │
         ▼
 [3] Generate_Transient_Data.py    Generate step-by-step reasoning & conclusion
-        │
-        ▼ ◄─────────────────────────────────────┐
-[4a] check_plan_execution.py      Validate XML structure (<Plan>/<Execution>)   │
+        │ ◄──────────────────────────────────────────────────────────────────────┐
+        ▼                                                                        │
+[4a] check_plan_execution.py      Validate XML structure (<Plan>/<Execution>)    │
         │                                                                        │
         ▼                                                                        │
 [4b] check_conclusion.py          Validate conclusion consistency via LLM        │
@@ -39,23 +39,19 @@ The pipeline starts from a **JSONL file** (one JSON object per line) where each 
 {"id": "0", "question": "A 58-year-old male presents with crushing chest pain radiating to the left arm, diaphoresis, and dyspnea. ECG shows ST-segment elevation in leads II, III, and aVF. What is the most likely diagnosis?", "answer": "Inferior STEMI", "options": {"A": "Stable angina", "B": "Inferior STEMI", "C": "Pulmonary embolism", "D": "Aortic dissection"}, "original_reasoning": "1: Chest pain->ST elevation->Myocardial infarction\n2: Inferior leads (II,III,aVF)->Right coronary artery territory->Inferior STEMI"}
 ```
 
-| Field | Type | Description |
-|---|---|---|
-| `id` | string | Unique sample identifier |
-| `question` | string | Medical question text |
-| `answer` | string | Correct answer text |
-| `options` | dict | Answer choices, e.g. `{"A": "...", "B": "...", "C": "...", "D": "..."}` |
-| `original_reasoning` | string | Pre-existing reasoning chains, one per line, format: `"N: A->B->C"` |
+
+| Field                | Type   | Description                                                             |
+| -------------------- | ------ | ----------------------------------------------------------------------- |
+| `id`                 | string | Unique sample identifier                                                |
+| `question`           | string | Medical question text                                                   |
+| `answer`             | string | Correct answer text                                                     |
+| `options`            | dict   | Answer choices, e.g. `{"A": "...", "B": "...", "C": "...", "D": "..."}` |
+| `original_reasoning` | string | Pre-existing reasoning chains, one per line, format: `"N: A->B->C"`     |
+
 
 ### Where to get the input data
 
-The source dataset is [MedReason](https://huggingface.co/datasets/UCSC-VLAA/MedReason) on HuggingFace, which provides medical QA with graph-structured reasoning paths. Download and convert to the JSONL format above, or use MedXpertQA as an additional source.
-
-The `original_reasoning` field contains graph-structured reasoning chains extracted from medical knowledge graphs. For the generation method, refer to [MedReason](https://github.com/UCSC-VLAA/MedReason) — MedVerse uses the same approach to construct `A->B->C` reasoning chains from medical QA pairs before feeding them into this pipeline.
-
-### Generating `original_reasoning` from scratch
-
-The code in [`medreason/`](medreason/) is adapted from [MedReason](https://github.com/UCSC-VLAA/MedReason) and can be called directly to generate `original_reasoning` chains from raw medical QA data. See [Generating `original_reasoning`](#generating-original_reasoning) below for setup and usage.
+Use [MedReason](https://huggingface.co/datasets/UCSC-VLAA/MedReason) on HuggingFace as the source dataset. Download and convert to the JSONL format above. To generate `original_reasoning` chains from scratch, use the code in [`medreason/`](medreason/) — see [Generating `original_reasoning`](#generating-original_reasoning) below.
 
 ---
 
@@ -97,7 +93,7 @@ The code in [`medreason/`](medreason/) is adapted from [MedReason](https://githu
 }
 ```
 
-The `Eligible` field tracks validation status: `0` = needs validation, `2` = fully validated.
+The `Eligible` field tracks validation status: `0` = needs validation, `1` = passed XML check, `2` = fully validated.
 
 ---
 
@@ -107,7 +103,6 @@ The `Eligible` field tracks validation status: `0` = needs validation, `2` = ful
 
 ```bash
 conda activate medverse
-pip install openai pandas lxml
 ```
 
 ### 2. Prepare input data
@@ -130,12 +125,14 @@ MAX_ITER=3 \
 bash generate_data.sh
 ```
 
-| Variable | Default | Description |
-|---|---|---|
-| `OPENAI_API_KEY` | *(required)* | OpenAI API key |
-| `INPUT_JSONL` | `./jsonl/reasoning_path_raw.jsonl` | Input JSONL file |
-| `DATA_AMOUNT` | `14000` | Target number of training samples |
-| `MAX_ITER` | `5` | Max validation-regeneration iterations |
+
+| Variable         | Default                            | Description                            |
+| ---------------- | ---------------------------------- | -------------------------------------- |
+| `OPENAI_API_KEY` | *(required)*                       | OpenAI API key                         |
+| `INPUT_JSONL`    | `./jsonl/reasoning_path_raw.jsonl` | Input JSONL file                       |
+| `DATA_AMOUNT`    | `14000`                            | Target number of training samples      |
+| `MAX_ITER`       | `5`                                | Max validation-regeneration iterations |
+
 
 ### 4. Run scripts individually
 
@@ -178,84 +175,23 @@ python "$SCRIPTS/check_conclusion.py" \
 
 The final validated dataset is a JSON dict where each value contains the structured training sample with `Transient Plan Prompt`, `Transient Execution Prompt`, and `Conclusion`. These three fields form the DAG-structured reasoning output that MedVerse is trained to produce.
 
-The dataset is used directly by the training script:
-
-```bash
-bash train/scripts/launch_train_qwen.sh   # Qwen2.5-7B-Instruct
-
-bash train/scripts/launch_train_llama.sh  # LLaMA-3.1-8B-Instruct
-```
-
-See [`train/README.md`](../train/README.md) for training details.
-
 ---
 
 ## Generating `original_reasoning`
 
-The [`medreason/`](medreason/) directory contains code adapted from [MedReason](https://github.com/UCSC-VLAA/MedReason) to generate knowledge-grounded `A->B->C` reasoning chains from raw medical QA pairs. These chains become the `original_reasoning` field fed into Step 1 of this pipeline.
-
-### How it works
-
-1. Entity extraction — an LLM extracts medical entities from the question and answer
-2. KG path finding — entities are matched to nodes in [PrimeKG](https://github.com/mims-harvard/PrimeKG), and shortest paths between question entities and answer entities are enumerated
-3. Reasoning generation — an LLM uses the KG paths as scaffolding to write step-by-step reasoning chains in `A->B->C` format
-4. Quality filtering — a second LLM judges whether the generated reasoning leads to the correct answer
-
-### Setup
-
-```bash
-conda activate medverse
-```
-
-**Set your OpenAI API key** in `medreason/utils.py` or via environment variable:
-
-```python
-clients = {
-    "gpt-5.2": {
-        'api_key':  "YOUR_API_KEY",
-    },
-}
-```
-
-**Download PrimeKG** from [Harvard Dataverse](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/IXA7BM) and save as `primeKG.csv`.
-
-**Generate node embeddings** (one-time, ~10 min on GPU):
-
-```bash
-cd medreason
-python -c "import utils; utils.generate_node_embeddings(knowledge_graph_path='primeKG.csv')"
-# Saves node_embeddings.pt in the current directory
-```
-
-### Usage
-
-```bash
-cd medreason
-
-# Generate reasoning for medqa (50 samples)
-python generate_reasoning.py --dataset medqa --sample 50
-
-# Generate with parallel workers
-python generate_reasoning.py --dataset medqa --sample 500 --batch_size 4
-
-# Quality-filter the output
-python quality_filtering.py --source_file medqa_0_50.jsonl
-```
-
-Output is written to `results/` (raw) and `results/quality_sampling/` (filtered). Each line is a JSONL record with `id`, `question`, `answer`, `options`, and `reasoning` — where `reasoning` maps to the `original_reasoning` field in the pipeline input format (reformat `N: A->B->C` chains as needed).
-
-The dataset configurations in `configs/dataset_configs.yml` support: `medqa`, `MMLU`, `medmcqa`, `pubmedqa_artificial`, `pubmedqa_labeled`, `MedXpertQA`, `huatuo`, `LastHumanity`.
+The [`medreason/`](medreason/) directory contains code adapted from [MedReason](https://github.com/UCSC-VLAA/MedReason) for generating knowledge-grounded `A->B->C` reasoning chains from raw medical QA pairs. These chains serve as the `original_reasoning` field fed into Step 1 of this pipeline. Refer to the [MedReason repository](https://github.com/UCSC-VLAA/MedReason) for full usage details.
 
 ---
 
 ## Acknowledgements
 
-The [`medreason/`](medreason/) directory contains code adapted from [**MedReason**](https://github.com/UCSC-VLAA/MedReason) (Wu et al., UCSC VLAA). MedReason introduces the methodology for constructing knowledge-grounded medical reasoning chains by linking medical QA entities through the PrimeKG knowledge graph. We gratefully acknowledge their contribution.
+The [`medreason/`](medreason/) directory contains code adapted from **[MedReason](https://github.com/UCSC-VLAA/MedReason)** (Wu et al., UCSC VLAA). MedReason introduces the methodology for constructing knowledge-grounded medical reasoning chains by linking medical QA entities through the PrimeKG knowledge graph. We gratefully acknowledge their contribution.
 
-```
+```bibtex
 @article{wu2025medreason,
   title={MedReason: Eliciting Factual Medical Reasoning Steps in LLMs via Knowledge Graph},
   author={Wu, Juncheng and others},
   year={2025}
 }
 ```
+
