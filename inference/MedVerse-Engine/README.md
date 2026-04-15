@@ -8,41 +8,12 @@ This repository contains the official implementation of MedVerse Inference Engin
 
 ## 🤖 Key Features
 
-The engine adds three components on top of stock SGLang to implement two-phase DAG-structured parallel execution:
-
-| Component | File | Role |
-| --- | --- | --- |
-| `MedVerseTokenizerManager` | `srt/managers/medverse_tokenizer_manager.py` | Injects `</Plan>` stop token so Phase I halts after plan generation |
-| `MedVerseScheduler` | `srt/managers/medverse_scheduler.py` | Detects plan end, forks child requests for every step, joins outputs into a single conclusion request |
-| `outline_parser` + `petri_net` | `srt/medverse/` | Parse `<Outline>` tags into a dependency DAG; track step completion via Petri nets |
-
-**Execution flow:**
-
-```
-Client → /generate (MedVerse prompt)
-    │
-    ▼  Phase I
-MedVerseTokenizerManager injects </Plan> stop
-SGLang generates: preamble → <Plan><Outline>...</Outline></Plan>
-    │
-    ▼  fork (MedVerseScheduler._scan_and_fork_plans)
-outline_parser extracts StepDef list
-PetriNet built; all steps pre-fired (speculative parallel)
-Child requests dispatched simultaneously for every step
-    │
-    │  Phase II — all steps run in parallel on GPU
-    ├── Step 1 child → generates until </Step>
-    ├── Step 2 child → generates until </Step>
-    └── Step N child → generates until </Step>
-    │
-    ▼  join (MedVerseScheduler.merge_zombie_batch_to_run)
-Radix-cache prefix from Phase I shared across all branches
-Step outputs concatenated → conclusion_header appended
-Single join request dispatched for Phase III
-    │
-    ▼
-Client ← complete response (Plan + Steps + Conclusion)
-```
+- **Two-phase DAG execution** — Phase I generates a structured `<Plan>` with an `<Outline>` dependency graph; Phase II dispatches all reasoning steps in parallel on the GPU, then joins outputs into a final conclusion.
+- **`MedVerseTokenizerManager`** — injects a `</Plan>` stop token so the model halts after plan generation and before parallel step execution begins.
+- **`MedVerseScheduler`** — detects plan completion, forks child requests for every step in the DAG, and merges outputs into a single conclusion request.
+- **`outline_parser` + `petri_net`** — parse `<Outline>` tags into a dependency DAG and track step completion via Petri nets to coordinate parallel execution.
+- **Shared KV-cache prefix** — all parallel step branches reuse the Phase I radix-cache prefix, minimizing redundant computation across steps.
+- **OpenAI-compatible API** — drop-in `/v1/chat/completions` endpoint; MedVerse routing is triggered automatically when the prompt contains the `<Think>` token.
 
 ---
 
