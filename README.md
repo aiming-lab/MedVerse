@@ -54,7 +54,7 @@ pip install -r requirements.txt
 **Inference Engine** (`medverse-engine`):
 
 ```bash
-cd MedVerse/inference/engine/MedVerse-Engine
+cd MedVerse/inference/MedVerse-Engine
 conda create -n medverse-engine python=3.11 -y
 conda activate medverse-engine
 bash install.sh
@@ -106,12 +106,14 @@ Wait for `Server is ready` in the logs.
 ### Try an Example
 
 ```bash
-cd MedVerse/inference/engine/MedVerse-Engine/example
+cd MedVerse/inference/MedVerse-Engine/example
 
 python example.py \
     --server_url http://localhost:30000 \
     --prompts_dir ./prompt
 ```
+
+See [inference/MedVerse-Engine/README.md](inference/MedVerse-Engine/README.md) for full installation and configuration details.
 
 ---
 
@@ -128,6 +130,8 @@ If you find our work helpful, please consider citing:
     url           = {https://arxiv.org/abs/2602.07529},
 }
 ```
+
+---
 
 ## 🙏 Acknowledgement
 

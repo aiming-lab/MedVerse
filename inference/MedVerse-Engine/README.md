@@ -1,10 +1,8 @@
-<div align="center">
+# MedVerse Inference Engine
 
-<h1>MedVerse Inference Engine</h1>
+**SGLang-based inference server for MedVerse medical reasoning models**
 
-**SGLang-based fork/join inference server for MedVerse medical reasoning models**
 
-</div>
 
 This directory contains the MedVerse inference engine — a modified [SGLang](https://github.com/sgl-project/sglang) server that implements two-phase DAG-structured parallel execution for medical reasoning.
 
@@ -14,11 +12,13 @@ This directory contains the MedVerse inference engine — a modified [SGLang](ht
 
 The engine adds three components on top of stock SGLang:
 
-| Component | File | Role |
-|---|---|---|
-| `MedVerseTokenizerManager` | `srt/managers/medverse_tokenizer_manager.py` | Injects `</Plan>` stop token so Phase I halts after plan generation |
-| `MedVerseScheduler` | `srt/managers/medverse_scheduler.py` | Detects plan end, forks child requests for every step, joins outputs into a single conclusion request |
-| `outline_parser` + `petri_net` | `srt/medverse/` | Parse `<Outline>` tags into a dependency DAG; track step completion via Petri nets |
+
+| Component                      | File                                         | Role                                                                                                  |
+| ------------------------------ | -------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `MedVerseTokenizerManager`     | `srt/managers/medverse_tokenizer_manager.py` | Injects `</Plan>` stop token so Phase I halts after plan generation                                   |
+| `MedVerseScheduler`            | `srt/managers/medverse_scheduler.py`         | Detects plan end, forks child requests for every step, joins outputs into a single conclusion request |
+| `outline_parser` + `petri_net` | `srt/medverse/`                              | Parse `<Outline>` tags into a dependency DAG; track step completion via Petri nets                    |
+
 
 ### Execution flow
 
@@ -53,11 +53,11 @@ Client ← complete response (Plan + Steps + Conclusion)
 ## Installation
 
 ```bash
-conda create -n medverse python=3.11 -y
-conda activate medverse
+git clone https://github.com/aiming-lab/MedVerse.git
+cd MedVerse/inference/MedVerse-Engine
 
-git clone --recurse-submodules https://github.com/aiming-lab/MedVerse.git
-cd MedVerse/inference/engine/MedVerse-Engine
+conda create -n medverse-engine python=3.11 -y
+conda activate medverse-engine
 
 bash install.sh
 ```
@@ -96,7 +96,7 @@ Wait for `Server is ready` in the logs before sending requests.
 ```bash
 cd example
 python example.py \
-    --model_path /path/to/MedVerse-7B \
+    --server_url http://localhost:30000 \
     --prompts_dir ./prompt
 ```
 
@@ -124,33 +124,6 @@ response = client.chat.completions.create(
 )
 print(response.choices[0].message.content)
 ```
-
----
-
-## Benchmark
-
-From the repo root:
-
-```bash
-cd inference/engine
-
-python benchmark_sglang.py \
-    --sglang_url http://localhost:30000 \
-    --data_dir ../../eval_data \
-    --max_samples 30 \
-    --batch_size 1 \
-    --output_dir bench_results
-```
-
-Results on MedVerse-7B (30 samples, batch size 1):
-
-| Dataset | MedVerse | AutoReg | Speedup |
-|---|---|---|---|
-| HLE Biomed | 56.7% | 36.7% | 1.46× |
-| MedXpertQA | 23.3% | 20.0% | 1.32× |
-| MedBullets Op4 | 73.3% | 73.3% | 1.85× |
-| MedBullets Op5 | 63.3% | 60.0% | 1.28× |
-| MedQA | 63.3% | 60.0% | 1.34× |
 
 ---
 
