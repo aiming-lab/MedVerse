@@ -2,16 +2,16 @@
 
 This repository contains the official implementation of MedVerse Inference Engine, which is built upon the [SGLang](https://github.com/sgl-project/sglang) codebase to support inference for MedVerse models. For more details, please refer to our research paper:
 
-**MedVerse: Efficient and Reliable Medical Reasoning via DAG-Structured Parallel Execution**
+**[MedVerse: Efficient and Reliable Medical Reasoning via DAG-Structured Parallel Execution](https://arxiv.org/abs/2602.07529)**
 
 ---
 
-## 🤖 Key Features
+## Key Features
 
 - **Two-phase DAG execution** — Phase I generates a structured `<Plan>` with an `<Outline>` dependency graph; Phase II dispatches all reasoning steps in parallel on the GPU, then joins outputs into a final conclusion.
-- **`MedVerseTokenizerManager`** — injects a `</Plan>` stop token so the model halts after plan generation and before parallel step execution begins.
-- **`MedVerseScheduler`** — detects plan completion, forks child requests for every step in the DAG, and merges outputs into a single conclusion request.
-- **`outline_parser` + `petri_net`** — parse `<Outline>` tags into a dependency DAG and track step completion via Petri nets to coordinate parallel execution.
+- `**MedVerseTokenizerManager`** — injects a `</Plan>` stop token so the model halts after plan generation and before parallel step execution begins.
+- `**MedVerseScheduler**` — detects plan completion, forks child requests for every step in the DAG, and merges outputs into a single conclusion request.
+- `**outline_parser` + `petri_net**` — parse `<Outline>` tags into a dependency DAG and track step completion via Petri nets to coordinate parallel execution.
 - **Shared KV-cache prefix** — all parallel step branches reuse the Phase I radix-cache prefix, minimizing redundant computation across steps.
 - **OpenAI-compatible API** — drop-in `/v1/chat/completions` endpoint; MedVerse routing is triggered automatically when the prompt contains the `<Think>` token.
 
@@ -81,3 +81,4 @@ response = client.chat.completions.create(
 )
 print(response.choices[0].message.content)
 ```
+
