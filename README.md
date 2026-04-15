@@ -68,10 +68,18 @@ MedVerse is fine-tuned from Qwen2.5-7B-Instruct and LLaMA-3.1-8B-Instruct using 
 
 ### Data Preparation
 
-The preparation script automatically downloads [MedVerse14k](https://huggingface.co/datasets/Jianwen/MedVerse14k) from HuggingFace and converts it to the format expected by the training script:
+The scripts below automatically download [MedVerse14k](https://huggingface.co/datasets/Jianwen/MedVerse14k) from HuggingFace and convert it into the training format for each model. Run the one matching your target model:
 
 ```bash
-cd data && python preparation/prepare_train.py && cd ..
+cd data
+
+# Qwen2.5 — converts to ChatML format, saves to data/datasets/MedVerse14k
+python preparation/prepare_train.py
+
+# LLaMA-3 — converts to LLaMA chat format, saves to data/datasets/MedVerse14k-LLaMA
+python preparation/prepare_train_llama.py
+
+cd ..
 ```
 
 Or generate the dataset from scratch using the MedVerse Curator pipeline — see [data/README.md](data/README.md) for the full data generation guide including input format and step-by-step instructions.
