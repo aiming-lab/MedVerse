@@ -1,6 +1,103 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+pip-wheel-metadata/
+.installed.cfg
+MANIFEST
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+*.cover
+coverage.xml
+nosetests.xml
+
+# Type checkers
+.mypy_cache/
+.pytype/
+.pyre/
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.spyderproject.cfg
+.ropeproject
+
+# Jupyter
+.ipynb_checkpoints
+*.ipynb
+
+# Distribution / packaging
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Claude Code local settings
+.claude/
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ML / training artifacts
 ckpts/
-
 wandb/
+runs/
+checkpoints/
+*.pt
+*.pth
+*.bin
+*.safetensors
 
+# Training data (large; distributed separately)
 train/json/
 train/MedVerse14k/
+data/datasets/
+
+# Benchmark outputs
+bench_results*/
+
+# Script outputs
+results/
+data/results/
+data/json/
+data/jsonl/
+
+# Dataset cache files
+*.arrow
+
+# C extensions
+*.o
+*.a
+*.dll
+*.dylib
+compile_commands.json
+
+# Docs
+docs/_build/

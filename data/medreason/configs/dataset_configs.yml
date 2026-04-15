@@ -1,0 +1,96 @@
+huatuo:
+  file_type: huggingface
+  path: FreedomIntelligence/medical-o1-reasoning-SFT
+  split: train
+  parsers:
+    question: [{key: Question, prefix: "", suffix: ""}]
+    answer: [{key: Response, prefix: "", suffix: ""}]
+    comparison: [{key: Complex_CoT, prefix: "", suffix: ""}]
+    options: []
+  name: en
+
+# get the raw data at https://github.com/aistairc/medLLM_QA_benchmark/blob/main/data/en/MMLU/mmlu_en_medical.jsonl
+MMLU:
+  file_type: json
+  path: /path/to/mmlu_en_medical.jsonl
+  split: train
+  parsers:
+    question: [{key: problem_text, prefix: "", suffix: ""}]
+    answer: mmlu_answer_parser
+    comparison: []
+    options: mmlu_option_parser
+
+# get the data at https://huggingface.co/datasets/bigbio/med_qa/tree/main
+medqa:
+  file_type: json
+  path: /path/to/medqa.jsonl
+  split: train
+  parsers:
+    question: [{key: question, prefix: "", suffix: ""}]
+    answer: [{key: answer, prefix: "", suffix: ""}]
+    comparison: []
+    options: medqa_option_parser
+
+medmcqa:
+  file_type: huggingface
+  path: openlifescienceai/medmcqa
+  split: train
+  parsers:
+    question: [{key: question, prefix: "", suffix: ""}]
+    answer: medmcqa_answer_parser
+    comparison: []
+    options: medmcqa_option_parser
+
+pubmedqa_artificial:
+  file_type: huggingface
+  path: qiaojin/PubMedQA
+  split: train
+  parsers:
+    question: [{key: question, prefix: "", suffix: ""}]
+    answer: [{key: final_decision, prefix: "The final decision is: ", suffix: "."}, {key: long_answer, prefix: "", suffix: ""}]
+    comparison: []
+    options: pubmedqa_option_parser
+  name: pqa_artificial
+
+pubmedqa_labeled:
+  file_type: huggingface
+  path: qiaojin/PubMedQA
+  split: train
+  parsers:
+    question: [{key: question, prefix: "", suffix: ""}]
+    answer: [{key: final_decision, prefix: "The final decision is: ", suffix: "."}, {key: long_answer, prefix: "", suffix: ""}]
+    comparison: []
+    options: pubmedqa_option_parser
+  name: pqa_labeled
+
+pubmedqa_unlabeled:
+  file_type: huggingface
+  path: qiaojin/PubMedQA
+  split: train
+  parsers:
+    question: [{key: question, prefix: "", suffix: ""}]
+    answer: [{key: long_answer, prefix: "", suffix: ""}]
+    comparison: []
+    options: pubmedqa_option_parser
+  name: pqa_unlabeled
+
+MedXpertQA:
+  file_type: huggingface
+  path: TsinghuaC3I/MedXpertQA
+  split: test
+  parsers:
+    question: [{key: question, prefix: "", suffix: ""}]
+    answer: medxpertqa_answer_parser
+    comparison: []
+    options: []
+  name: Text
+
+LastHumanity:
+  file_type: json
+  path: /path/to/LastHumanity.jsonl
+  split: train
+  parsers:
+    question: [{key: question, prefix: "", suffix: ""}]
+    answer: [{key: answer, prefix: "", suffix: ""}]
+    comparison: [{key: rationale, prefix: "", suffix: ""}]
+    options: []

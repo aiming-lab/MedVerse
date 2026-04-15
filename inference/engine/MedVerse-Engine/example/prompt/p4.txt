@@ -1,0 +1,5 @@
+A 62-year-old man with a 45 pack-year smoking history presents with a 3-month history of worsening dyspnea, weight loss of 8 kg, and a new persistent cough productive of blood-streaked sputum. Chest CT shows a 3.2 cm spiculated right upper lobe mass with ipsilateral mediastinal lymphadenopathy and no distant metastases. Bronchoscopic biopsy confirms squamous cell carcinoma. PET scan shows FDG uptake in the mass and right paratracheal nodes only. What is the most appropriate treatment?
+A. Concurrent chemoradiation (cisplatin-based) with curative intent
+B. Surgical resection alone (lobectomy)
+C. Palliative radiation to control hemoptysis
+D. Immunotherapy alone (pembrolizumab) regardless of PD-L1 status

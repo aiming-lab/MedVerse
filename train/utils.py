@@ -61,7 +61,7 @@ TAG_TOKEN_IDS = {
 _STEP_RE = re.compile(r"Transient\s+Step\s+(\d+)", re.IGNORECASE)
 _DEP_RE  = re.compile(r"Dependency\s*:\s*\[([0-9,\s]*)\]", re.IGNORECASE)
 
-def generate_multiverse_attention_mask(input_ids, tokenizer, device='cpu'):
+def generate_medverse_attention_mask(input_ids, tokenizer, device='cpu'):
     seq_len = len(input_ids)
     # Start with a lower triangular matrix (causal mask)
     bool_attention_mask = torch.tril(torch.ones(seq_len, seq_len, dtype=torch.bool, device=device)) # Keep bool intermediate mask
@@ -220,7 +220,7 @@ def generate_multiverse_attention_mask(input_ids, tokenizer, device='cpu'):
     return float_attention_mask
 
 
-def generate_multiverse_position_ids(input_ids: List[int], tokenizer) -> List[int]:
+def generate_medverse_position_ids(input_ids: List[int], tokenizer) -> List[int]:
     """
     Make position ids reflect parallel Steps:
       1) Parse <Outline> -> deps_map (step_id -> set(deps)).
@@ -336,14 +336,14 @@ def generate_multiverse_position_ids(input_ids: List[int], tokenizer) -> List[in
     return position_ids
 
 
-class MultiverseDataCollatorForCompletionOnlyLM(trl.DataCollatorForCompletionOnlyLM):
-    def __init__(self, *args, max_length=None, use_multiverse: bool = False, **kwargs):
+class MedVerseDataCollatorForCompletionOnlyLM(trl.DataCollatorForCompletionOnlyLM):
+    def __init__(self, *args, max_length=None, use_medverse: bool = False, **kwargs):
         super().__init__(*args, **kwargs)
         self.max_length = max_length
-        self.use_multiverse = use_multiverse
+        self.use_medverse = use_medverse
     
     def torch_call(self, examples: List[Union[List[int], Any, Dict[str, Any]]]) -> Dict[str, Any]:
-        if not self.use_multiverse:
+        if not self.use_medverse:
             return super().torch_call(examples)
 
         # First, generate full attention masks and position ids for complete sequences
@@ -358,8 +358,8 @@ class MultiverseDataCollatorForCompletionOnlyLM(trl.DataCollatorForCompletionOnl
                 input_ids = example
             
             # Generate full attention mask and position ids based on complete sequence
-            attention_mask = generate_multiverse_attention_mask(input_ids, self.tokenizer)
-            position_id = generate_multiverse_position_ids(input_ids, self.tokenizer)
+            attention_mask = generate_medverse_attention_mask(input_ids, self.tokenizer)
+            position_id = generate_medverse_position_ids(input_ids, self.tokenizer)
             
             attention_masks.append(attention_mask)
             position_ids.append(position_id)

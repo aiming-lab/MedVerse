@@ -1,3 +1,0 @@
-[submodule "inference/engine"]
-	path = inference/engine
-	url = https://github.com/Multiverse4FM/Multiverse-Engine

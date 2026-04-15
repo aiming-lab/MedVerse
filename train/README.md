@@ -1,32 +1,73 @@
-<div align="center">
-<h1><img src="../assets/multiverse-logo.png" height="40px" align="top"/> Multiverse Training
-</h1>
-</div>
+# Training
 
-# Description
+Fine-tuning scripts for MedVerse medical reasoning models using topology-aware attention SFT.
 
-This training setup is adapted from the [s1: Simple test-time scaling](https://github.com/simplescaling/s1) repository. In the training section we provide the code to train:
-1. `Multiverse-32B`: the Multiverse reasoning model applying Multiverse Attention mechanism which enables its splist/merge ability during inference, trained by `Multiverse 1K` dataset.
-2. `Autoregressive-32B`: the AR reasoning model trained by `Multiverse 1K` dataset.
+## Directory Structure
 
-## Environment
+```
+train/
+├── sft_medverse.py        # Training entry point
+├── utils.py               # Topology-aware attention mask & data collator
+├── eval.py                # Post-training evaluation
+├── requirements.txt
+├── configs/               # FSDP configs per model family
+│   ├── fsdp_qwen.json
+│   ├── fsdp_qwen_cpu.json
+│   └── fsdp_llama.json
+└── scripts/               # Launch scripts
+    ├── launch_train_qwen.sh
+    └── launch_train_llama.sh
+```
 
-To train `Multiverse-32B`/`Autoregressive-32B`, we recommend 16 A/H100 GPUs (i.e., 2 nodes with 8 each) or 8 B100/200 GPUs.
+## Requirements
 
-## Setup and Training
+- 2× GPU minimum (tested on NVIDIA RTX PRO 6000 Blackwell, 96 GB each)
+- See `requirements.txt` for Python dependencies
 
-### Quick Start
+## Quick Start
 
-1.  With prepared training data in Data section, you can train `Multiverse-32B` with following command.
-    ```bash
-    bash sft_multiverse.sh
-    ```
-2.  With prepared training data in Data section, you can train `Autoregressive-32B` with following command.
-    ```bash
-    bash sft_autoregressive.sh
-    ```
-3. We provide the original slurm/multinode support for the training in `sft_multinode.sh` and `sft_slurm.sh`.
+### 1. Prepare data
 
-### Notes
-*   If you encounter an out-of-memory (OOM) issue with 8 GPUs, consider enabling gradient checkpointing by adding `--gradient_checkpointing=True` to `train/sft.sh`.
-*   For `s1.1`, the original authors set the block size to 20000 to avoid OOM. This is configured in `train/sft.sh`.
+Generate or download the MedVerse14k dataset. See [`../data/README.md`](../data/README.md).
+
+The training scripts expect the dataset at `../data/datasets/MedVerse14k/` (HuggingFace Dataset format, produced by `../data/preparation/prepare_train.py`).
+
+### 2. Train
+
+```bash
+# Fine-tune Qwen2.5-7B-Instruct
+bash scripts/launch_train_qwen.sh
+
+# Fine-tune LLaMA-3.1-8B-Instruct
+bash scripts/launch_train_llama.sh
+```
+
+Edit the variables at the top of each script to set your model path, output directory, and GPU selection.
+
+### 3. Evaluate
+
+```bash
+python eval.py \
+    --model_name /path/to/checkpoint \
+    --eval_file ../eval_data/medqa_test.jsonl \
+    --use_chat_template \
+    --batch_size 4
+```
+
+## Configuration
+
+Key training hyperparameters (paper settings):
+
+| Parameter | Value |
+|---|---|
+| Learning rate | 1e-5 |
+| Epochs | 3 |
+| Global batch size | 128 (2 GPU × 1 × grad_accum 64) |
+| Block size | 8192 |
+| LR scheduler | Cosine |
+| Warmup ratio | 0.03 |
+
+FSDP configs are in `configs/`:
+- `fsdp_qwen_cpu.json` — Qwen with CPU offload (recommended for memory-constrained setups)
+- `fsdp_qwen.json` — Qwen without CPU offload
+- `fsdp_llama.json` — LLaMA-3.1

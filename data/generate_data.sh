@@ -1,46 +1,86 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# MedVerse Data Generation Pipeline
+#
+# Generates the MedVerse14k training dataset in four stages:
+#   1. Generate reasoning paths from raw medical QA
+#   2. Convert reasoning paths into DAG plans
+#   3. Generate transient step data via LLM
+#   4. Iterative validation loop: XML check -> conclusion check -> regenerate
+#
+# Usage:
+#   export OPENAI_API_KEY="sk-..."
+#   bash generate_data.sh
+#
+# Override defaults with environment variables:
+#   INPUT_JSONL=./jsonl/my_data.jsonl DATA_AMOUNT=5000 MAX_ITER=3 bash generate_data.sh
 
-# Step 1: run Generate_Transient_Data.py once
+set -euo pipefail
 
-# LOG_FILE="logs/run_$(date '+%Y-%m-%d_%H-%M-%S').log"
-# exec > >(tee -a "$LOG_FILE") 2>&1
+API_KEY="${OPENAI_API_KEY:?Please set OPENAI_API_KEY before running}"
+SCRIPTS="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/generation"
 
-# conda create -n medreason-test python=3.10
+# ── File paths ────────────────────────────────────────────────────────────────
+INPUT_JSONL="${INPUT_JSONL:-./jsonl/reasoning_path_raw.jsonl}"
+PLAN_JSON="${PLAN_JSON:-./json/MedVerse_Plan.json}"
+TRANSIENT_JSON="${TRANSIENT_JSON:-./json/MedVerse_transient.json}"
+XML_CHECKED_JSON="${XML_CHECKED_JSON:-./json/MedVerse_xml_checked.json}"
+VALIDATED_JSON="${VALIDATED_JSON:-./json/MedVerse_validated.json}"
 
-# conda activate medreason-test
-# pip install openai pandas lxml
+# ── Config ────────────────────────────────────────────────────────────────────
+DATA_AMOUNT="${DATA_AMOUNT:-14000}"
+MAX_ITER="${MAX_ITER:-5}"
 
-API_KEY="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"
-# python3 code/Generate_Reasoning_Path.py --input="./jsonl/new_reasoning_path.jsonl" --output="./jsonl/new_reasoning_path_1.jsonl" --API_KEY=$API_KEY
+mkdir -p ./jsonl ./json
 
-# python ./code/Generate_Initial_plan.py --input="./jsonl/new_reasoning_path_1.jsonl" --output="./json/Med_Reason_Plan_medqa.json"
+# ── Step 1: Generate reasoning paths ─────────────────────────────────────────
+echo "[1/4] Generating reasoning paths..."
+python "$SCRIPTS/Generate_Reasoning_Path.py" \
+    --input  "$INPUT_JSONL" \
+    --output "$INPUT_JSONL" \
+    --API_KEY "$API_KEY"
 
-# python ./code/Generate_Transient_Data.py --input_json_path="./json/Med_Reason_Plan_medqa.json" --output_json_path="./json/Med_Reason_medqa_10_1.json" --data_amount=10000 --last_json="./json/Med_Reason_medqa_3k.json" --API_KEY=$API_KEY
+# ── Step 2: Build initial DAG plans ──────────────────────────────────────────
+echo "[2/4] Building initial DAG plans..."
+python "$SCRIPTS/Generate_Initial_Plan.py" \
+    --input  "$INPUT_JSONL" \
+    --output "$PLAN_JSON"
 
-python ./code/Generate_Transient_Data.py --input_json_path="./json/Med_Reason_Final_10_3.json" --output_json_path="./json/Med_Reason_Final_10_1.json" --data_amount=15000 --API_KEY=$API_KEY
+# ── Step 3: Generate transient step data ─────────────────────────────────────
+echo "[3/4] Generating transient step data (target: $DATA_AMOUNT samples)..."
+python "$SCRIPTS/Generate_Transient_Data.py" \
+    --input_json_path  "$PLAN_JSON" \
+    --output_json_path "$TRANSIENT_JSON" \
+    --data_amount      "$DATA_AMOUNT" \
+    --API_KEY          "$API_KEY"
 
-# Step 2: loop up to 5 times
-for i in {1}
-do
-    echo "=== Iteration $i ==="
+# ── Step 4: Validation + regeneration loop ───────────────────────────────────
+echo "[4/4] Starting validation loop (max $MAX_ITER iterations)..."
+for i in $(seq 1 "$MAX_ITER"); do
+    echo "=== Iteration $i / $MAX_ITER ==="
 
-    # python ./code/check_plan_execution.py --input_json_path="./json/Med_Reason_Final_10_3.json" --output_json_path="./json/Med_Reason_Final_10_2.json"
+    # 4a. Filter out malformed XML (Plan / Execution structure)
+    python "$SCRIPTS/check_plan_execution.py" \
+        --input_json_path  "$TRANSIENT_JSON" \
+        --output_json_path "$XML_CHECKED_JSON"
 
-    python ./code/check_conclusion.py --input_json_path="./json/Med_Reason_Final_10_1.json" --output_json_path="./json/Med_Reason_Final_10_3.json" --API_KEY=$API_KEY
+    # 4b. Filter out inconsistent conclusions
+    python "$SCRIPTS/check_conclusion.py" \
+        --input_json_path  "$XML_CHECKED_JSON" \
+        --output_json_path "$VALIDATED_JSON" \
+        --API_KEY          "$API_KEY"
 
-    # python ./code/check_plan_execution.py --input_json_path="./json/Med_Reason_medqa_10_1.json" --output_json_path="./json/Med_Reason_medqa_10_2.json"
+    # 4c. Regenerate samples that failed validation
+    output=$(python "$SCRIPTS/Generate_Transient_Data.py" \
+        --input_json_path  "$VALIDATED_JSON" \
+        --output_json_path "$TRANSIENT_JSON" \
+        --data_amount      "$DATA_AMOUNT" \
+        --API_KEY          "$API_KEY" 2>&1)
+    echo "$output"
 
-    # python ./code/check_conclusion.py --input_json_path="./json/Med_Reason_medqa_10_2.json" --output_json_path="./json/Med_Reason_medqa_10_3.json" --API_KEY=$API_KEY
-
-    # Capture output of Generate_Transient_Data.py
-    # python ./code/Generate_Transient_Data.py --input_json_path="./json/Med_Reason_medqa_10_3.json" --output_json_path="./json/Med_Reason_medqa_10_1.json"  --data_amount=1 --API_KEY=$API_KEY
-    # output=$(python ./code/Generate_Transient_Data.py --input_json_path="./json/Med_Reason_Final_10_3.json" --output_json_path="./json/Med_Reason_Final_10_1.json"  --data_amount=3500)
-
-    # echo "$output"
-
-    # # If program prints ALL DATA ARE ELIGIBLE., stop loop
-    # if echo "$output" | grep -q "ALL DATA ARE ELIGIBLE."; then
-    #     echo "All data eligible, stopping loop."
-    #     break
-    # fi
+    if echo "$output" | grep -q "ALL DATA ARE ELIGIBLE."; then
+        echo "All data eligible. Stopping early."
+        break
+    fi
 done
+
+echo "Done. Final dataset: $VALIDATED_JSON"

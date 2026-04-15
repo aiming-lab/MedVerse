@@ -5,7 +5,31 @@ import json
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, GenerationConfig
 from jinja2 import Template
-from scorer import get_results
+
+
+def get_results(log_save_path):
+    """Compute accuracy by matching predicted answer letter against gold label."""
+    import re
+    with open(log_save_path) as f:
+        results = json.load(f)
+    correct, total = 0, 0
+    for item in results:
+        gold = str(item.get("answer_idx", item.get("answer", ""))).strip().upper()
+        pred = item.get("output", "")
+        # Extract last "The answer is X" or standalone letter near end
+        match = re.search(r"(?:answer is|Answer:)\s*([A-E])", pred, re.IGNORECASE)
+        if not match:
+            match = re.search(r"\b([A-E])\b(?=[^A-E]*$)", pred)
+        predicted = match.group(1).upper() if match else ""
+        if predicted == gold:
+            correct += 1
+        total += 1
+    accuracy = correct / total if total > 0 else 0.0
+    print(f"Accuracy: {correct}/{total} = {accuracy:.4f}")
+    result_path = log_save_path.replace(".json", "_score.json")
+    with open(result_path, "w") as f:
+        json.dump({"accuracy": accuracy, "correct": correct, "total": total}, f, indent=2)
+    return accuracy
 
 
 def postprocess_output(pred):
@@ -39,10 +63,9 @@ def load_file(input_fp):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--model_name', type=str,
-                        default="/data/qwen2.5-7b/Multiverse-20250918_235502")
+    parser.add_argument('--model_name', type=str, required=True)
     parser.add_argument('--eval_file', type=str, required=True)
-    parser.add_argument('--max _new_tokens', type=int, default=2000)
+    parser.add_argument('--max_new_tokens', type=int, default=2000)
     parser.add_argument('--max_tokens', type=int, default=-1)
     parser.add_argument('--use_chat_template', action="store_true")
     parser.add_argument('--strict_prompt', action="store_true")

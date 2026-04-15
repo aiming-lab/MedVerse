@@ -1,89 +1,133 @@
 # MedVerse: Efficient and Reliable Medical Reasoning via DAG-Structured Parallel Execution
 
-<div align="center">
-
-Bridging the gap between Medical Reasoning and Parallel Inference.
-
-</div>
+Bridging the gap between medical reasoning quality and inference efficiency through DAG-structured parallel execution.
 
 ## 🔥 News
 
-- **[02/07/2026]** MedVerse paper was released on [arXiv](https://arxiv.org/abs/2602.07529)!
+- **[04/15/2026]** The code of MedVerse was released!
+- **[02/10/2026]** MedVerse paper released on [arXiv](https://arxiv.org/abs/2602.07529).
 
 ## 📖 Overview
 
-MedVerse is a framework that enables LLM agents to learn high-level, reusable behavioral patterns from past experiences. While traditional memory-based methods store redundant and noisy raw trajectories, SKILLRL abstracts these into a hierarchical skill library.
+Medical reasoning is inherently multi-faceted: answering a clinical question requires simultaneously reasoning over differential diagnoses, laboratory findings, drug interactions, and treatment guidelines. Standard autoregressive LLMs collapse these parallel cognitive tasks into a single sequential chain-of-thought — forcing steps that are logically independent to wait on one another.
+
+**MedVerse** reformulates medical inference as a parallelizable directed acyclic graph (DAG) grounded in Petri net theory. The framework has three components:
+
+
+| Component                     | What it does                                                                                                                                                   |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **MedVerse Curator**          | Automated pipeline that synthesizes knowledge-grounded medical reasoning and converts it into Petri net DAG structures for training                            |
+| **Topology-Aware Attention**  | Training-time attention mechanism with adaptive position indices that enables the model to reason across parallel branches while maintaining logical coherence |
+| **MedVerse Inference Engine** | Customized SGLang-based server that executes the DAG at inference time — forking independent steps into concurrent GPU requests and joining their outputs      |
+
+
+Together, these yield a model that matches specialized medical models while improving general-purpose LLMs by up to 8.9%, and an inference engine that reduces latency by 1.3× and increases generation throughput by 1.7× through parallel decoding.
 
 ## 🤖 Key Features
 
-- **Experience-based Skill Distillation**: Transforms successful trajectories into strategic patterns and failed ones into concise lessons from failure.
-
-- **Hierarchical SKILLBANK**: Organizes knowledge into General Skills for universal strategic guidance and Task-Specific Skills for category-level heuristics.
-
-- **Recursive Skill Evolution**: A dynamic mechanism where the skill library co-evolves with the agent's policy during RL by analyzing validation failures.
-
-- **Context Efficiency**: Achieves 10-20% token compression compared to raw trajectory storage while enhancing reasoning utility. 
+- **DAG-structured parallel inference**: MedVerse models emit a `<Plan>` block encoding explicit step dependencies as a Petri net. The inference engine parses this into a DAG, identifies independent reasoning paths, and dispatches them as concurrent GPU requests — no client changes required.
+- **Topology-aware attention with adaptive position indices**: The fine-tuned model learns to produce coherent parallel reasoning branches through a topology-aware attention mask applied during training. Adaptive position indices ensure each branch maintains positional context relative to the shared prefix, not to each other.
+- **Knowledge-grounded medical reasoning (MedVerse Curator)**: Training data is synthesized by the MedVerse Curator: a pipeline that decomposes medical questions into multi-step reasoning graphs, grounded in clinical knowledge sources, then converts them into the Petri net format used at inference time.
+- **Radix-cache prefix sharing**: All parallel child requests in Phase II share the same Phase I KV-cache prefix via SGLang's radix attention tree, making Phase II prefill cost near-zero regardless of the number of parallel branches.
 
 ---
 
 ## 🚀 Getting Started
 
 ### Installation
+
 ```bash
 git clone https://github.com/aiming-lab/MedVerse.git
-cd MedVerse
+```
 
+**Training** (`medverse`):
+
+```bash
+cd MedVerse/train
+conda create -n medverse python=3.10 -y
+conda activate medverse
 pip install -r requirements.txt
-pip install vllm==0.11.0
-pip install flash-attn==2.7.4.post1 --no-build-isolation --no-cache-dir
-pip install -e .
-
-pip install openai
 ```
 
-## 🏛️ Repository Structure
+**Inference Engine** (`medverse-engine`):
 
-This repository provides a complete ecosystem for building and deploying Multiverse models. Our structure is organized as follows:
-
-**🗂️ `data`** → **📈 `train`** → **🚀 `inference`**
-
-```
-Multiverse
-├── data/
-│   └── src
-|   └── run
-|   └── README.md
-│
-├── train
-│   └── README.md
-│
-├── inference/
-│   └── engine
-|   └── README.md
-│
-└── README.md
+```bash
+cd MedVerse/inference/engine/MedVerse-Engine
+conda create -n medverse-engine python=3.11 -y
+conda activate medverse-engine
+bash install.sh
 ```
 
-- **`data/`**: Contains the **Multiverse Curator** toolkit for dataset preparation. Use it to generate your own **Multiverse-1K** dataset for training.
+---
 
-- **`training/`**: Implements the **Multiverse Attention** algorithm for the efficient training of Multiverse models. We also includes the code for AR baselines
+## 🏋️ Training
 
-- **`inference/`**: Features the **Multiverse Engine** implementation, a high-performance inference server optimized for Multiverse models.
+MedVerse is fine-tuned from Qwen2.5-7B-Instruct and LLaMA-3.1-8B-Instruct using **topology-aware attention** on the **MedVerse14k** dataset — 13,904 medical questions annotated with knowledge-grounded DAG reasoning paths generated by the MedVerse Curator. The training dataset is available on [🤗 HuggingFace](https://huggingface.co/datasets/aiming-lab/MedVerse14k).
 
-For detailed documentation and usage instructions, please refer to the README.md files in each directory.
+### Data Preparation
 
-## 📚 References
+Download the MedVerse14k dataset from [🤗 HuggingFace](https://huggingface.co/datasets/aiming-lab/MedVerse14k) and run the preparation script:
 
-Thank you for your interest in Multiverse Engine! We hope this tool will be helpful for your research and development. If you find it useful, please consider citing our work. Happy coding! 🚀
+```bash
+# Download and convert to HF dataset format expected by the training script
+cd data && python preparation/prepare_train.py && cd ..
+```
+
+Or generate the dataset from scratch using the MedVerse Curator pipeline — see [data/README.md](data/README.md) for the full data generation guide including input format and step-by-step instructions.
+
+### Train MedVerse (Topology-Aware Attention SFT)
+
+```bash
+bash train/scripts/launch_train_qwen.sh   # Qwen2.5-7B-Instruct
+bash train/scripts/launch_train_llama.sh  # LLaMA-3.1-8B-Instruct
+```
+
+See [train/README.md](train/README.md) for configuration details.
+
+---
+
+## ⚡ Inference Engine
+
+### Start the Server
+
+```bash
+python -m sglang.srt.entrypoints.medverse_server \
+    --model-path /path/to/MedVerse-Qwen2.5-7B \
+    --tp-size 1 \
+    --port 30000 \
+    --trust-remote-code \
+    --mem-fraction-static 0.85
+```
+
+Wait for `Server is ready` in the logs.
+
+### Try an Example
+
+```bash
+cd MedVerse/inference/engine/MedVerse-Engine/example
+
+python example.py \
+    --server_url http://localhost:30000 \
+    --prompts_dir ./prompt
+```
+
+---
+
+## 📚 Citation
+
+If you find our work helpful, please consider citing:
 
 ```bibtex
-@misc{yang2025multiverselanguagemodelssecretly,
-      title={Multiverse: Your Language Models Secretly Decide How to Parallelize and Merge Generation}, 
-      author={Xinyu Yang and Yuwei An and Hongyi Liu and Tianqi Chen and Beidi Chen},
-      year={2025},
-      eprint={2506.09991},
-      archivePrefix={arXiv},
-      primaryClass={cs.LG},
-      url={https://arxiv.org/abs/2506.09991}, 
+@article{chen2026medverse,
+    title         = {MedVerse: Efficient and Reliable Medical Reasoning via DAG-Structured Parallel Execution},
+    author        = {Jianwen Chen and Xinyu Yang and Peng Xia and Arian Azarang and Yueh Z Lee and Gang Li and Hongtu Zhu and Yun Li and Beidi Chen and Huaxiu Yao},
+    journal       = {arXiv preprint arXiv:2602.07529},
+    year          = {2026},
+    url           = {https://arxiv.org/abs/2602.07529},
 }
 ```
+
+## 🙏 Acknowledgement
+
+We would like to express our gratitude to the open-source community and the following projects for making this work possible:
+[SGLang](https://github.com/sgl-project/sglang), [Multiverse Engine](https://github.com/Multiverse4FM/Multiverse-Engine), [Qwen](https://github.com/QwenLM/Qwen2.5), [MedReason](https://github.com/UCSC-VLAA/MedReason), etc.
