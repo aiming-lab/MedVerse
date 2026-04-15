@@ -1,64 +1,14 @@
 # MedVerse Inference Engine
 
-**SGLang-based inference server for MedVerse medical reasoning models**
+This repository contains the official implementation of MedVerse Inference Engine, which is built upon the [SGLang](https://github.com/sgl-project/sglang) codebase to support inference for MedVerse models. For more details, please refer to our research paper:
 
-
-
-This directory contains the MedVerse inference engine — a modified [SGLang](https://github.com/sgl-project/sglang) server that implements two-phase DAG-structured parallel execution for medical reasoning.
-
----
-
-## Architecture
-
-The engine adds three components on top of stock SGLang:
-
-
-| Component                      | File                                         | Role                                                                                                  |
-| ------------------------------ | -------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `MedVerseTokenizerManager`     | `srt/managers/medverse_tokenizer_manager.py` | Injects `</Plan>` stop token so Phase I halts after plan generation                                   |
-| `MedVerseScheduler`            | `srt/managers/medverse_scheduler.py`         | Detects plan end, forks child requests for every step, joins outputs into a single conclusion request |
-| `outline_parser` + `petri_net` | `srt/medverse/`                              | Parse `<Outline>` tags into a dependency DAG; track step completion via Petri nets                    |
-
-
-### Execution flow
-
-```
-Client → /generate (MedVerse prompt)
-    │
-    ▼  Phase I
-MedVerseTokenizerManager injects </Plan> stop
-SGLang generates: preamble → <Plan><Outline>...</Outline></Plan>
-    │
-    ▼  fork (MedVerseScheduler._scan_and_fork_plans)
-outline_parser extracts StepDef list
-PetriNet built; all steps pre-fired (speculative parallel)
-Child requests dispatched simultaneously for every step
-    │
-    │  Phase II — all steps run in parallel on GPU
-    ├── Step 1 child → generates until </Step>
-    ├── Step 2 child → generates until </Step>
-    └── Step N child → generates until </Step>
-    │
-    ▼  join (MedVerseScheduler.merge_zombie_batch_to_run)
-Radix-cache prefix from Phase I shared across all branches
-Step outputs concatenated → conclusion_header appended
-Single join request dispatched for Phase III
-    │
-    ▼
-Client ← complete response (Plan + Steps + Conclusion)
-```
+**MedVerse: Efficient and Reliable Medical Reasoning via DAG-Structured Parallel Execution**
 
 ---
 
 ## Installation
 
 ```bash
-git clone https://github.com/aiming-lab/MedVerse.git
-cd MedVerse/inference/MedVerse-Engine
-
-conda create -n medverse-engine python=3.11 -y
-conda activate medverse-engine
-
 bash install.sh
 ```
 
@@ -125,15 +75,3 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
----
-
-## Known Limitations
-
-- **KV cache eviction** is not yet supported. For stability, keep concurrent requests ≤ 50.
-- **Very long plans** (> 8 steps) may exceed KV memory; consider setting `--max-total-tokens` conservatively.
-
----
-
-## License
-
-MIT. See [LICENSE](LICENSE).
