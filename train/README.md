@@ -38,9 +38,12 @@ For lower-memory setups, reduce `--gradient_accumulation_steps` and increase CPU
 
 ### 1. Prepare data
 
-Generate or download the MedVerse14k dataset. See `[../data/README.md](../data/README.md)`.
+Generate or download the MedVerse14k dataset. See [../data/README.md](../data/README.md).
 
-The training scripts expect the dataset at `../data/datasets/MedVerse14k/` (HuggingFace Dataset format, produced by `../data/preparation/prepare_train.py`).
+The training scripts expect the dataset in HuggingFace Dataset format produced by the preparation scripts:
+
+- Qwen2.5: `../data/datasets/MedVerse14k/` — produced by `../data/preparation/prepare_train.py`
+- LLaMA-3: `../data/datasets/MedVerse14k-LLaMA/` — produced by `../data/preparation/prepare_train_llama.py`
 
 ### 2. Train
 
