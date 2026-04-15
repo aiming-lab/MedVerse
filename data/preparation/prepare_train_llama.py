@@ -6,7 +6,7 @@ from typing import Any, Dict, List
 from datasets import Dataset, DatasetDict
 
 RAW_JSON_PATH = "./json/MedVerse14k.json"
-OUTPUT_DS_DIR = "MedVerse14k-LLaMA"
+OUTPUT_DS_DIR = "datasets/MedVerse14k-LLaMA"
 
 SYSTEM_PROMPT = "You are a helpful medical assistant."
 BRIDGE_SENTENCE = (
