@@ -1,67 +1,39 @@
 """Prepare MedVerse14k in LLaMA-3 chat format for fine-tuning."""
-import json
-from pathlib import Path
-from typing import Any, Dict, List
+from datasets import load_dataset, Dataset, DatasetDict
 
-from datasets import Dataset, DatasetDict
-
-RAW_JSON_PATH = "./json/MedVerse14k.json"
+HF_DATASET = "Jianwen/MedVerse14k"
 OUTPUT_DS_DIR = "datasets/MedVerse14k-LLaMA"
 
 SYSTEM_PROMPT = "You are a helpful medical assistant."
-BRIDGE_SENTENCE = (
-    "First find a reasoning path, then transform that path into an outlined plan, "
-    "then execute the plan, and finally synthesize a concise conclusion."
-)
 
 
-def build_llama_chat(item: Dict[str, Any]) -> str:
-    Q = ("Question: \n" + item.get("Question", "") or "").strip()
-    OPT = (item.get("Options", "") or "").strip()
-    PATH = (item.get("Original Reason Path", "") or "").strip()
-    PLAN = (item.get("Transient Plan Prompt", "") or "").strip()
-    EXEC = (item.get("Transient Execution Prompt", "") or "").strip()
-    CONC = (item.get("Conclusion", "") or "").strip()
-    final_answer = (item.get("Goal", "") or "").strip()
-
-    user_block = "\n".join([x for x in [Q, OPT] if x])
-
-    assistant_parts = [
-        "<Think>",
-        BRIDGE_SENTENCE,
-        "Finding Reasoning Path:",
-        PATH,
-        PLAN,
-        EXEC,
-        "<Conclusion>",
-        CONC,
-        "</Conclusion>",
-        "</Think>",
-        f"Answer: {final_answer}",
-    ]
-    assistant_block = "\n".join([p for p in assistant_parts if p])
-
-    # LLaMA-3 chat format
-    text = (
-        "<|begin_of_text|>"
-        "<|start_header_id|>system<|end_header_id|>\n\n"
-        f"{SYSTEM_PROMPT}<|eot_id|>"
-        "<|start_header_id|>user<|end_header_id|>\n\n"
-        f"{user_block}<|eot_id|>"
-        "<|start_header_id|>assistant<|end_header_id|>\n\n"
-        f"{assistant_block}<|eot_id|>"
-    )
-    return text
+def messages_to_llama(messages: list) -> str:
+    """Convert HF messages list to LLaMA-3 chat format."""
+    parts = ["<|begin_of_text|>"]
+    for msg in messages:
+        role = msg["role"]
+        content = msg["content"]
+        parts.append(
+            f"<|start_header_id|>{role}<|end_header_id|>\n\n{content}<|eot_id|>"
+        )
+    return "".join(parts)
 
 
 def main():
-    raw = json.loads(Path(RAW_JSON_PATH).read_text(encoding="utf-8"))
-    samples = list(raw.values()) if isinstance(raw, dict) else raw
+    print(f"Loading dataset from HuggingFace: {HF_DATASET} ...")
+    hf_ds = load_dataset(HF_DATASET)
 
-    rows: List[Dict[str, str]] = []
-    for i, item in enumerate(samples):
-        text = build_llama_chat(item)
-        rows.append({"id": str(i), "text": text})
+    rows = []
+    for split_name in hf_ds:
+        for item in hf_ds[split_name]:
+            messages = item["messages"]
+            # Ensure system prompt is set correctly
+            if messages and messages[0]["role"] != "system":
+                messages = [{"role": "system", "content": SYSTEM_PROMPT}] + messages
+            elif messages and messages[0]["role"] == "system":
+                messages[0]["content"] = SYSTEM_PROMPT
+            text = messages_to_llama(messages)
+            rows.append({"id": str(item["id"]), "text": text})
 
     ds = Dataset.from_list(rows)
     split = ds.train_test_split(test_size=0.1, seed=42)

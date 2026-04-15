@@ -68,10 +68,9 @@ MedVerse is fine-tuned from Qwen2.5-7B-Instruct and LLaMA-3.1-8B-Instruct using 
 
 ### Data Preparation
 
-Download the MedVerse14k dataset from [🤗 HuggingFace](https://huggingface.co/datasets/Jianwen/MedVerse14k) and run the preparation script:
+The preparation script automatically downloads [MedVerse14k](https://huggingface.co/datasets/Jianwen/MedVerse14k) from HuggingFace and converts it to the format expected by the training script:
 
 ```bash
-# Download and convert to HF dataset format expected by the training script
 cd data && python preparation/prepare_train.py && cd ..
 ```
 
